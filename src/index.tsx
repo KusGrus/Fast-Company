@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import api from './api'
-import {FastCompany} from "./components/FastCompany"
+import FastCompany from "./components/FastCompany"
 
 
 ReactDOM.render(
