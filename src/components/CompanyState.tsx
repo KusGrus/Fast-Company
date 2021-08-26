@@ -2,7 +2,7 @@ import React from 'react'
 import {FastStateProps} from "./types"
 import Utils from '../common/utils'
 
-const CompanyState = (props: FastStateProps) => {
+const CompanyState = ({count}: FastStateProps) => {
     const getClasses = (num: number) => {
         let color;
         if (num >= 9) {
@@ -16,8 +16,6 @@ const CompanyState = (props: FastStateProps) => {
         }
         return `badge bg-${color} primary`
     }
-
-    const count = props.count
 
     if (count) {
         const persons = Utils.declOfNum(count, ['человек', 'человека', 'человек'])

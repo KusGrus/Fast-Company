@@ -1,10 +1,10 @@
 import React from 'react'
 import {FastListProps} from "./types"
 import {QualityDTO} from "../api/fake.api/user.api.model";
+import Bookmark from "./Bookmark";
 
-const CompanyItem = (props: FastListProps) => {
+const CompanyItem = ({user, onDelete, onMark}: FastListProps) => {
     const getQualityClasses = (quality: QualityDTO) => `badge bg-${quality.color} mr-5`
-    const user = props.user
     return (
         <React.Fragment>
             <tr>
@@ -14,9 +14,10 @@ const CompanyItem = (props: FastListProps) => {
                 </th>
                 <th scope="col">{user.profession.name}</th>
                 <th scope="col">{user.completedMeetings}</th>
+                <th scope="col"><Bookmark onMark={onMark} user={user}/></th>
                 <th scope="col">{user.rate}</th>
                 <th scope="col">
-                    <button onClick={() => props.onDelete(user._id)} type="button"
+                    <button onClick={() => onDelete(user._id)} type="button"
                             className="btn btn-danger">Delete
                     </button>
                 </th>

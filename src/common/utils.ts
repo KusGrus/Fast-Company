@@ -7,7 +7,7 @@ function declOfNum(num: number, text_forms: string[]): string {
     if (n > 1 && n < 5) {
         return text_forms[1]
     }
-    if (n == 1) {
+    if (n === 1) {
         return text_forms[0]
     }
     return text_forms[2]
