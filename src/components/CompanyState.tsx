@@ -1,10 +1,10 @@
 import React from 'react'
-import {FastStateProps} from "./types"
+import { FastStateProps } from './types'
 import Utils from '../common/utils'
 
-const CompanyState = ({count}: FastStateProps) => {
+const CompanyState = ({ count }: FastStateProps) => {
     const getClasses = (num: number) => {
-        let color;
+        let color
         if (num >= 9) {
             color = 'success'
         } else if (num < 9 && num > 5) {
@@ -20,9 +20,17 @@ const CompanyState = ({count}: FastStateProps) => {
     if (count) {
         const persons = Utils.declOfNum(count, ['человек', 'человека', 'человек'])
         const action = Utils.declOfNum(count, ['тусанет', 'тусанут', 'тусанут'])
-        return (<h1 className={getClasses(count)}>{count} {persons} {action} с тобой сегодня!</h1>)
+        return (
+            <h1 className={getClasses(count)}>
+                {count} {persons} {action} с тобой сегодня!
+            </h1>
+        )
     } else {
-        return (<h1 className={getClasses(count)}>Sorry, никто не тусанет с тобой today...</h1>)
+        return (
+            <h1 className={getClasses(count)}>
+        Sorry, никто не тусанет с тобой today...
+            </h1>
+        )
     }
 }
 
