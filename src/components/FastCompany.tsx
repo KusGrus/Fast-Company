@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {FastCompanyProps} from "./types"
 import CompanyState from "./CompanyState"
 import CompanyList from "./CompanyList";
+import paginationContainer from "./PaginationContainer";
 
 const FastCompany = (props: FastCompanyProps) => {
     const [users, setUsers] = useState(props.users)
@@ -17,13 +18,15 @@ const FastCompany = (props: FastCompanyProps) => {
         }
     }
 
+    const CompanyListWithPaging = paginationContainer(CompanyList)
+
     return (
         <React.Fragment>
             <div className="flex-container">
                 <CompanyState count={users.length}/>
                 <button onClick={handleReset} type="button" className="btn btn-primary">Reset</button>
             </div>
-            <CompanyList users={users} onMark={handleMark} onDelete={handleDelete}/>
+            <CompanyListWithPaging users={users} onMark={handleMark} onDelete={handleDelete}/>
         </React.Fragment>
     );
 }

@@ -28,3 +28,13 @@ export interface BookmarkProps {
     user: ExtraUserDTO
     onMark: (id: string) => any
 }
+
+export interface Pagination {
+    count: number
+    page: number
+}
+
+export interface PaginationProps extends CompanyListProps {
+    paging?: Pagination
+}
+
