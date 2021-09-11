@@ -17,6 +17,7 @@ module.exports = {
         'no-use-before-define': 'off',
         indent: ['error', 4],
         'react/display-name': 'off',
-        'space-before-function-paren': 'off'
+        'space-before-function-paren': 'off',
+        'no-unused-vars': 'off'
     }
 }

@@ -1,38 +1,43 @@
-import { UserDTO } from '../api/fake.api/user.api.model'
+import { ProfessionDTO, ProfessionMap, UserDTO } from '../api/fake.api/user.api.model'
 
 export interface ExtraUserDTO extends UserDTO {
-  mark?: boolean;
+  mark?: boolean
 }
 
 export interface FastCompanyProps {
-  users: ExtraUserDTO[];
+  users: ExtraUserDTO[]
+}
+
+export interface GroupListProps {
+  items: Promise<ProfessionMap<ProfessionDTO>>
+  onItemSelect: (params: any) => any
 }
 
 export interface FastStateProps {
-  count: number;
+  count: number
 }
 
 export interface CompanyListProps extends FastCompanyProps {
-  onDelete: (id: string) => any;
-  onMark: (id: string) => any;
+  onDelete: (id: string) => any
+  onMark: (id: string) => any
 }
 
 export interface FastListProps {
-  user: ExtraUserDTO;
-  onDelete: (id: string) => any;
-  onMark: (id: string) => any;
+  user: ExtraUserDTO
+  onDelete: (id: string) => any
+  onMark: (id: string) => any
 }
 
 export interface BookmarkProps {
-  user: ExtraUserDTO;
-  onMark: (id: string) => any;
+  user: ExtraUserDTO
+  onMark: (id: string) => any
 }
 
 export interface Pagination {
-  count: number;
-  page: number;
+  count: number
+  page: number
 }
 
 export interface PaginationProps extends CompanyListProps {
-  paging?: Pagination;
+  paging?: Pagination
 }

@@ -3,9 +3,12 @@ import { FastCompanyProps } from './types'
 import CompanyState from './CompanyState'
 import CompanyList from './CompanyList'
 import paginationContainer from './PaginationContainer'
+import GroupList from './GroupList'
+import api from '../api'
 
 const FastCompany = (props: FastCompanyProps) => {
     const [users, setUsers] = useState(props.users)
+    const [professions, setProfessions] = useState(api.professions.fetchAll())
 
     const handleDelete = (id: string) =>
         setUsers(users.filter((user) => user._id !== id))
@@ -19,11 +22,15 @@ const FastCompany = (props: FastCompanyProps) => {
             setUsers(temp)
         }
     }
+    const handleProfessionSelect = (params: any) => {
+        console.log(params)
+    }
 
     const CompanyListWithPaging = paginationContainer(CompanyList)
 
     return (
         <React.Fragment>
+            <GroupList items={professions} onItemSelect={handleProfessionSelect}/>
             <div className="flex-container">
                 <CompanyState count={users.length} />
                 <button onClick={handleReset} type="button" className="btn btn-primary">
