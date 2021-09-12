@@ -1,11 +1,11 @@
-type Professions =
+export type Professions =
   | 'doctor'
   | 'waiter'
   | 'physics'
   | 'engineer'
   | 'actor'
   | 'cook';
-type Qualities =
+export type Qualities =
   | 'tedious'
   | 'strange'
   | 'buller'

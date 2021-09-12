@@ -1,5 +1,5 @@
 import { QualitiesMap, QualityDTO, UserDTO } from './user.api.model'
-import { professions } from './professions.api'
+import { professionsObject as professions } from './professions.api'
 
 const qualities: QualitiesMap<QualityDTO> = {
     tedious: {
@@ -129,6 +129,13 @@ const users: UserDTO[] = [
     }
 ]
 
-export function fetchAll(): UserDTO[] {
-    return users
+const fetchAll = () =>
+    new Promise((resolve) => {
+        window.setTimeout(function () {
+            resolve(users)
+        }, 2000)
+    })
+
+export default {
+    fetchAll
 }

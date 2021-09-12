@@ -20,7 +20,27 @@ code {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+
+  aside {
+    flex: 0 0 15%;
+    max-width: 250px;
+    margin: 0 auto;
+    padding: 0 10px;
+
+    button {
+      display: block;
+      margin: 0 auto 10px;
+    }
+  }
+
+  main {
+    width: 80%;
+  }
+}
+
+.pagination {
+  justify-content: center;
 }
 
 .badge {
