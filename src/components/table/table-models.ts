@@ -21,6 +21,7 @@ export interface TableProps {
 }
 
 export interface TableHeaderProps {
+    activeSort: SortFieldState | undefined
     columns: Column[]
     onSort: (code: string) => any
 }
@@ -49,5 +50,6 @@ export interface PaginationController {
 
 export interface TableItem {
     _id: string;
+
     [key: string]: any
 }

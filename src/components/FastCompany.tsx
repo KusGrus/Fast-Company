@@ -6,14 +6,19 @@ import FiltersGroup from './FiltersGroup'
 import api from '../api'
 import { ObjectDTO, ProfessionDTO, UserDTO } from '../api/fake.api/user.api.model'
 import { Column, Paging, TableItem } from './table/table-models'
-import { FilterMap, ItemForMark } from './types'
+import { FilterMap, ItemForMark, TableItemWithQuality } from './types'
+import QualitiesList from './table/QualitiesList'
 
 const FastCompany = () => {
     const [columns] = useState<Column[]>([
         { code: 'name', title: 'Имя', path: 'name', sort: 'default' },
-        { code: 'qualities', title: 'Качества' },
+        {
+            code: 'qualities',
+            title: 'Качества',
+            componentFn: (item: TableItemWithQuality) => (<QualitiesList qualities={item.qualities}/>)
+        },
         { code: 'profession', title: 'Профессия', path: 'profession.name', sort: 'default' },
-        { code: 'completedMeetings', title: 'Встретился (раз)', path: 'profession.completedMeetings', sort: 'default' },
+        { code: 'completedMeetings', title: 'Встретился (раз)', path: 'completedMeetings', sort: 'default' },
         {
             code: 'bookmark',
             title: 'Избранное',

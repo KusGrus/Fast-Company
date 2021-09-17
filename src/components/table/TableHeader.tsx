@@ -1,7 +1,18 @@
 import React from 'react'
-import { TableHeaderProps } from './table-models'
+import { Column, TableHeaderProps } from './table-models'
 
-const TableHeader = ({ columns, onSort }: TableHeaderProps) => {
+const TableHeader = ({ columns, onSort, activeSort }: TableHeaderProps) => {
+    const sortArrow = (column: Column) => {
+        if (activeSort?.code === column.code) {
+            if (activeSort?.sort === 'asc') {
+                return <i className="bi bi-caret-down-fill"/>
+            } else if (activeSort?.sort === 'desc') {
+                return <i className="bi bi-caret-up-fill"/>
+            }
+        } else {
+            return false
+        }
+    }
     return (
         <thead>
             <tr>
@@ -10,7 +21,7 @@ const TableHeader = ({ columns, onSort }: TableHeaderProps) => {
                         onClick={column.sort && (() => onSort(column.code))}
                         role={column.sort && 'button'}
                         scope="col">
-                        {column.title}
+                        <span>{column.title}{sortArrow(column)}</span>
                     </th>
                 ))}
             </tr>

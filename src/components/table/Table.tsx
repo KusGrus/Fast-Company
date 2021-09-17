@@ -27,11 +27,13 @@ const Table = ({ items, columns, paging, onChangePanging }: TableProps) => {
     }
 
     return (
-        <table className="table">
-            <TableHeader columns={columns} onSort={handleSorting}/>
-            <TableBody columns={columns} items={pagingItems}/>
+        <React.Fragment>
+            <table className="table">
+                <TableHeader columns={columns} onSort={handleSorting} activeSort={sortField}/>
+                <TableBody columns={columns} items={pagingItems}/>
+            </table>
             <Pagination total={items.length} paging={paging} controller={onChangePanging}/>
-        </table>
+        </React.Fragment>
     )
 }
 

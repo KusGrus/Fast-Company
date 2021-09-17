@@ -1,5 +1,5 @@
 import { TableItem } from './table/table-models'
-import { ObjectDTO } from '../api/fake.api/user.api.model'
+import { ObjectDTO, QualityDTO } from '../api/fake.api/user.api.model'
 
 export interface BookmarkProps {
     user: ItemForMark
@@ -8,6 +8,10 @@ export interface BookmarkProps {
 
 export interface CompanyStateProps {
     total: number
+}
+
+export interface QualitiesListProps {
+    qualities: QualityDTO[]
 }
 
 export interface FiltersGroupProps {
@@ -23,4 +27,8 @@ export interface ItemForMark extends TableItem {
 
 export interface FilterMap {
     [key: string]: ObjectDTO
+}
+
+export interface TableItemWithQuality extends TableItem {
+    qualities: QualityDTO[]
 }
