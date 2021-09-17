@@ -1,8 +1,8 @@
 import React from 'react'
-import { FastStateProps } from './types'
 import Utils from '../common/utils'
+import { CompanyStateProps } from './types'
 
-const CompanyState = ({ count }: FastStateProps) => {
+const CompanyState = ({ total }: CompanyStateProps) => {
     const getClasses = (num: number) => {
         let color
         if (num >= 9) {
@@ -17,18 +17,18 @@ const CompanyState = ({ count }: FastStateProps) => {
         return `badge bg-${color} primary`
     }
 
-    if (count) {
-        const persons = Utils.declOfNum(count, ['человек', 'человека', 'человек'])
-        const action = Utils.declOfNum(count, ['тусанет', 'тусанут', 'тусанут'])
+    if (total) {
+        const persons = Utils.declOfNum(total, ['человек', 'человека', 'человек'])
+        const action = Utils.declOfNum(total, ['тусанет', 'тусанут', 'тусанут'])
         return (
-            <h1 className={getClasses(count)}>
-                {count} {persons} {action} с тобой сегодня!
+            <h1 className={getClasses(total)}>
+                {total} {persons} {action} с тобой сегодня!
             </h1>
         )
     } else {
         return (
-            <h1 className={getClasses(count)}>
-        Sorry, никто не тусанет с тобой today...
+            <h1 className={getClasses(total)}>
+                Sorry, никто не тусанет с тобой today...
             </h1>
         )
     }

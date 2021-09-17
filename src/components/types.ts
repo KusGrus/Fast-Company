@@ -1,48 +1,26 @@
-import { ProfessionDTO, ProfessionMap, UserDTO } from '../api/fake.api/user.api.model'
-
-export interface ExtraUserDTO extends UserDTO {
-    mark?: boolean
-}
-
-export interface GroupListProps {
-    items: ProfessionMap<ProfessionDTO> | ProfessionDTO[] | undefined
-    selectedItem: ProfessionDTO | undefined
-    onItemSelect: (item: ProfessionDTO) => any
-}
-
-export interface FastStateProps {
-    count: number
-}
-
-export interface CompanyListProps {
-    users: ExtraUserDTO[]
-    onDelete: (id: string) => any
-    onMark: (id: string) => any
-}
-
-export interface FastListProps {
-    user: ExtraUserDTO
-    onDelete: (id: string) => any
-    onMark: (id: string) => any
-}
+import { TableItem } from './table/table-models'
+import { ObjectDTO } from '../api/fake.api/user.api.model'
 
 export interface BookmarkProps {
-    user: ExtraUserDTO
-    onMark: (id: string) => any
+    user: ItemForMark
+    onMark: (item: ItemForMark) => any
 }
 
-export interface Pagination {
-    count: number
-    page: number
+export interface CompanyStateProps {
+    total: number
 }
 
-export interface PaginationController {
-    change: (page: number) => any
-    first: () => any
-    last: (page: number) => any
+export interface FiltersGroupProps {
+    code: string
+    filters: ObjectDTO[] | { [key: string]: ObjectDTO }
+    selected: ObjectDTO
+    onSelect: (code: string, item: ObjectDTO) => any
 }
 
-export interface PaginationProps extends CompanyListProps {
-    paging: Pagination
-    pageController: PaginationController
+export interface ItemForMark extends TableItem {
+    bookmark?: boolean
+}
+
+export interface FilterMap {
+    [key: string]: ObjectDTO
 }

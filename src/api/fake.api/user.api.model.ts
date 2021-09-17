@@ -1,35 +1,38 @@
 export type Professions =
-  | 'doctor'
-  | 'waiter'
-  | 'physics'
-  | 'engineer'
-  | 'actor'
-  | 'cook';
+    | 'doctor'
+    | 'waiter'
+    | 'physics'
+    | 'engineer'
+    | 'actor'
+    | 'cook'
+
 export type Qualities =
-  | 'tedious'
-  | 'strange'
-  | 'buller'
-  | 'alcoholic'
-  | 'handsome'
-  | 'uncertain';
+    | 'tedious'
+    | 'strange'
+    | 'buller'
+    | 'alcoholic'
+    | 'handsome'
+    | 'uncertain'
 
-export type ProfessionMap<T> = Record<Professions, T>;
-export type QualitiesMap<T> = Record<Qualities, T>;
+export type ProfessionMap<T> = Record<Professions, T>
+export type QualitiesMap<T> = Record<Qualities, T>
 
-interface ObjectDTO {
-  _id: string;
-  name: string;
+export interface ObjectDTO {
+    _id: string
+    name: string
 }
 
-export interface ProfessionDTO extends ObjectDTO {}
+export interface ProfessionDTO extends ObjectDTO {
+}
 
 export interface QualityDTO extends ObjectDTO {
-  color: string;
+    color: string
 }
 
 export interface UserDTO extends ObjectDTO {
-  profession: ProfessionDTO;
-  qualities: QualityDTO[];
-  completedMeetings: number;
-  rate: number;
+    profession: ProfessionDTO
+    qualities: QualityDTO[]
+    completedMeetings: number
+    rate: number
+    bookmark: boolean
 }

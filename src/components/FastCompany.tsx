@@ -1,82 +1,96 @@
 import React, { useEffect, useState } from 'react'
-import { ExtraUserDTO, Pagination, PaginationController } from './types'
+import Table from './table/Table'
+import Bookmark from './Bookmark'
 import CompanyState from './CompanyState'
-import CompanyList from './CompanyList'
-import paginationContainer from './PaginationContainer'
-import GroupList from './GroupList'
+import FiltersGroup from './FiltersGroup'
 import api from '../api'
-import { ProfessionDTO } from '../api/fake.api/user.api.model'
+import { ObjectDTO, ProfessionDTO, UserDTO } from '../api/fake.api/user.api.model'
+import { Column, Paging, TableItem } from './table/table-models'
+import { FilterMap, ItemForMark } from './types'
 
 const FastCompany = () => {
-    const defaultPaging = { count: 3, page: 1 }
-    const [allUsers, setAllUsers] = useState<ExtraUserDTO[]>([])
-    const [users, setUsers] = useState<ExtraUserDTO[]>([])
-    const [professions, setProfessions] = useState()
-    const [selectedProfession, setSelectedProfession] = useState<ProfessionDTO>()
-    const [pagination, setPagination] = useState<Pagination>(defaultPaging)
+    const [columns] = useState<Column[]>([
+        { code: 'name', title: 'Имя', path: 'name', sort: 'default' },
+        { code: 'qualities', title: 'Качества' },
+        { code: 'profession', title: 'Профессия', path: 'profession.name', sort: 'default' },
+        { code: 'completedMeetings', title: 'Встретился (раз)', path: 'profession.completedMeetings', sort: 'default' },
+        {
+            code: 'bookmark',
+            title: 'Избранное',
+            sort: 'default',
+            componentFn: (item: TableItem) => (<Bookmark user={item} onMark={handleMark}/>)
+        },
+        { code: 'rate', title: 'Оценка', path: 'rate', sort: 'default' },
+        {
+            code: 'action',
+            title: '',
+            componentFn: (item: TableItem) => (<button
+                onClick={() => handleDelete(item._id)}
+                type="button"
+                className="btn btn-danger"
+            >
+                Delete
+            </button>)
+        }
+    ])
+    const [users, setUsers] = useState<UserDTO[]>([])
+    const [professions, setProfessions] = useState<ProfessionDTO[]>([])
+    const [paging, setPaging] = useState<Paging>({ count: 5, page: 1 })
+    const [filters, setFilters] = useState<FilterMap>({})
+
+    useEffect(() => {
+        api.users.fetchAll().then((data: any) => setUsers(data))
+    }, [])
 
     useEffect(() => {
         api.professions.fetchAll().then((data: any) => setProfessions(data))
-    }, [professions])
-
-    useEffect(() => {
-        api.users.fetchAll().then((data: any) => {
-            data = data.map((d: any) => ({ ...d, mark: false }))
-            setAllUsers(JSON.parse(JSON.stringify(data)))
-            setUsers(data)
-        })
     }, [])
 
-    const handleDelete = (id: string) => setUsers(allUsers.filter((user) => user._id !== id))
-
-    const handlePageChange: () => PaginationController = () => ({
-        first: () => setPagination((prevState) => ({ count: prevState.count, page: 1 })),
-        change: (page: number) => setPagination((prevState) => ({ count: prevState.count, page })),
-        last: (page: number) => setPagination((prevState) => ({ count: prevState.count, page }))
+    const handleDelete = (id: string) => setUsers(prevState => prevState.filter((user) => user._id !== id))
+    const handleMark = (user: ItemForMark) => setUsers(prevState => {
+        user.bookmark = !user.bookmark
+        return [...prevState]
     })
-
+    const pagingController = () => ({
+        first: () => setPaging((prevState) => ({ count: prevState.count, page: 1 })),
+        change: (page: number) => setPaging((prevState) => ({ count: prevState.count, page })),
+        last: (page: number) => setPaging((prevState) => ({ count: prevState.count, page }))
+    })
+    const handleFilterSelect = (code: string, filter: ObjectDTO) => {
+        setFilters(prevState => {
+            if (prevState[code] && prevState[code]._id === filter._id) {
+                return Object.keys(prevState).reduce((acc, cur) => {
+                    if (cur !== code) {
+                        return { ...acc, [cur]: prevState[cur] }
+                    } else {
+                        return acc
+                    }
+                }, {})
+            } else {
+                return { ...prevState, [code]: filter }
+            }
+        })
+    }
     const handleReset = () => {
-        setPagination(defaultPaging)
-        setUsers(allUsers)
-        setSelectedProfession(undefined)
+        setFilters({})
+        setPaging({ count: 5, page: 1 })
     }
 
-    const handleMark = (id: string) => {
-        const user = users.find((user) => user._id === id)
-        if (user) {
-            user.mark = !user.mark
-            setUsers([...users])
-        }
-    }
-
-    const handleProfessionSelect = (item: ProfessionDTO) => {
-        setPagination(defaultPaging)
-        setSelectedProfession(item)
-        setUsers(allUsers.filter((user) => user.profession._id === item._id))
-    }
-
-    const CompanyListWithPaging = paginationContainer(CompanyList)
+    const filterUsers = users.filter((user: { [key: string]: any }) =>
+        Object.keys(filters).every(prop => user[prop]?._id === filters[prop]._id)
+    )
 
     return (
         <React.Fragment>
             <div className="flex-container">
                 <aside>
-                    <button onClick={handleReset} type="button" className="btn btn-primary">
-                        Reset
-                    </button>
-                    {professions && <GroupList items={professions}
-                        selectedItem={selectedProfession}
-                        onItemSelect={handleProfessionSelect}/>}
+                    <button onClick={handleReset} type="button" className="btn btn-primary">Reset</button>
+                    <FiltersGroup code='profession' filters={professions} selected={filters.profession}
+                        onSelect={handleFilterSelect}/>
                 </aside>
-                <main>
-                    <CompanyState count={users.length}/>
-                    <CompanyListWithPaging
-                        users={users}
-                        pageController={handlePageChange()}
-                        paging={pagination}
-                        onMark={handleMark}
-                        onDelete={handleDelete}
-                    />
+                <main className="flex-column">
+                    <CompanyState total={users.length}/>
+                    <Table items={filterUsers} columns={columns} paging={paging} onChangePanging={pagingController()}/>
                 </main>
             </div>
         </React.Fragment>

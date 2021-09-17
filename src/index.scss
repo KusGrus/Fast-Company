@@ -22,6 +22,14 @@ code {
   justify-content: space-between;
   align-items: flex-start;
 
+  .flex-column {
+    display: flex;
+  }
+
+  table {
+    margin-top: 10px;
+  }
+
   aside {
     flex: 0 0 15%;
     max-width: 250px;
