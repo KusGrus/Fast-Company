@@ -50,6 +50,5 @@ export interface PaginationController {
 
 export interface TableItem {
     _id: string;
-
     [key: string]: any
 }

@@ -15,7 +15,7 @@ module.exports = {
     plugins: ['react', '@typescript-eslint'],
     rules: {
         'no-use-before-define': 'off',
-        indent: ['error', 4],
+        indent: ['error', 4, { SwitchCase: 1 }],
         'react/display-name': 'off',
         'space-before-function-paren': 'off',
         'no-unused-vars': 'off'

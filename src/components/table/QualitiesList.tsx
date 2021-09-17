@@ -5,13 +5,13 @@ import { QualityDTO } from '../../api/fake.api/user.api.model'
 const QualitiesList = ({ qualities }: QualitiesListProps) => {
     const getQualityClasses = (quality: QualityDTO) => `badge bg-${quality.color} mr-5`
     return (
-        <th scope="col">
+        <React.Fragment>
             {qualities.map((quality) => (
                 <span key={quality._id} className={getQualityClasses(quality)}>
                     {quality.name}
                 </span>
             ))}
-        </th>
+        </React.Fragment>
     )
 }
 

@@ -3,11 +3,11 @@ import Table from './table/Table'
 import Bookmark from './Bookmark'
 import CompanyState from './CompanyState'
 import FiltersGroup from './FiltersGroup'
+import QualitiesList from './table/QualitiesList'
 import api from '../api'
 import { ObjectDTO, ProfessionDTO, UserDTO } from '../api/fake.api/user.api.model'
 import { Column, Paging, TableItem } from './table/table-models'
 import { FilterMap, ItemForMark, TableItemWithQuality } from './types'
-import QualitiesList from './table/QualitiesList'
 
 const FastCompany = () => {
     const [columns] = useState<Column[]>([
@@ -53,8 +53,18 @@ const FastCompany = () => {
 
     const handleDelete = (id: string) => setUsers(prevState => prevState.filter((user) => user._id !== id))
     const handleMark = (user: ItemForMark) => setUsers(prevState => {
-        user.bookmark = !user.bookmark
-        return [...prevState]
+        const tempUser: UserDTO = { ...user as UserDTO, bookmark: !user.bookmark }
+        const idx = prevState.findIndex(state => state._id === user._id)
+        if (idx >= 0) {
+            return prevState.map(u => {
+                if (u._id === user._id) {
+                    return tempUser
+                } else {
+                    return u
+                }
+            })
+        }
+        return prevState
     })
     const pagingController = () => ({
         first: () => setPaging((prevState) => ({ count: prevState.count, page: 1 })),
@@ -84,6 +94,8 @@ const FastCompany = () => {
     const filterUsers = users.filter((user: { [key: string]: any }) =>
         Object.keys(filters).every(prop => user[prop]?._id === filters[prop]._id)
     )
+
+    console.log(users)
 
     return (
         <React.Fragment>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SortFieldState, TableItem, TableProps } from './table-models'
+import { SortFieldState, Sorting, TableProps } from './table-models'
 import TableHeader from './TableHeader'
 import TableBody from './TableBody'
 import Pagination from './Pagination'
@@ -10,16 +10,38 @@ const Table = ({ items, columns, paging, onChangePanging }: TableProps) => {
 
     const handleSorting = (code: string) => {
         if (sortField?.code === code) {
-            setSortField(prevState => ({
-                code: prevState?.code as string,
-                sort: prevState?.sort === 'asc' ? 'desc' : 'asc'
-            }))
+            setSortField(prevState => {
+                let sort: Sorting
+                switch (prevState?.sort) {
+                    case 'desc':
+                        sort = 'default'
+                        break
+                    case 'asc':
+                        sort = 'desc'
+                        break
+                    default:
+                        sort = 'asc'
+                        break
+                }
+                return { code, sort }
+            })
         } else {
             setSortField({ code, sort: 'asc' })
         }
     }
 
-    const sortingItems: TableItem[] = _.sortBy(items, [sortField?.code], [sortField?.sort])
+    const determinateSort = () => {
+        switch (sortField?.sort) {
+            case 'desc':
+                return _.sortBy(items, [sortField?.code], ['asc']).reverse()
+            case 'asc':
+                return _.sortBy(items, [sortField?.code], ['asc'])
+            default:
+                return items
+        }
+    }
+
+    const sortingItems = determinateSort()
     const startIndex = paging.count * (paging.page - 1)
     const pagingItems = sortingItems.slice(startIndex, startIndex + paging.count)
     if (!pagingItems.length && items.length) {
