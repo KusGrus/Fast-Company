@@ -95,8 +95,6 @@ const FastCompany = () => {
         Object.keys(filters).every(prop => user[prop]?._id === filters[prop]._id)
     )
 
-    console.log(users)
-
     return (
         <React.Fragment>
             <div className="flex-container">
