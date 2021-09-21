@@ -4,14 +4,21 @@ import Bookmark from './Bookmark'
 import CompanyState from './CompanyState'
 import FiltersGroup from './FiltersGroup'
 import QualitiesList from './table/QualitiesList'
-import api from '../api'
-import { ObjectDTO, ProfessionDTO, UserDTO } from '../api/fake.api/user.api.model'
+import api from '../../api'
+import { ObjectDTO, ProfessionDTO, UserDTO } from '../../api/fake.api/user.api.model'
 import { Column, Paging, TableItem } from './table/table-models'
 import { FilterMap, ItemForMark, TableItemWithQuality } from './types'
+import Loader from './loader/Loader'
+import { Link } from 'react-router-dom'
 
 const FastCompany = () => {
     const [columns] = useState<Column[]>([
-        { code: 'name', title: 'Имя', path: 'name', sort: 'default' },
+        {
+            code: 'name',
+            title: 'Имя',
+            sort: 'default',
+            componentFn: (item: { _id: string, name: string }) => (<Link to={`/users/${item._id}`}>{item.name}</Link>)
+        },
         {
             code: 'qualities',
             title: 'Качества',
@@ -95,21 +102,31 @@ const FastCompany = () => {
         Object.keys(filters).every(prop => user[prop]?._id === filters[prop]._id)
     )
 
-    return (
-        <React.Fragment>
-            <div className="flex-container">
-                <aside>
-                    <button onClick={handleReset} type="button" className="btn btn-primary">Reset</button>
-                    <FiltersGroup code='profession' filters={professions} selected={filters.profession}
-                        onSelect={handleFilterSelect}/>
-                </aside>
-                <main className="flex-column">
-                    <CompanyState total={users.length}/>
-                    <Table items={filterUsers} columns={columns} paging={paging} onChangePanging={pagingController()}/>
-                </main>
-            </div>
-        </React.Fragment>
-    )
+    if (users.length) {
+        return (
+            <React.Fragment>
+                {}
+                <div className="flex-container">
+                    <aside>
+                        <button onClick={handleReset} type="button" className="btn btn-primary">Reset</button>
+                        {professions?.length
+                            ? <FiltersGroup code="profession" filters={professions} selected={filters.profession}
+                                onSelect={handleFilterSelect}/>
+                            : <Loader/>
+                        }
+
+                    </aside>
+                    <main className="flex-column">
+                        <CompanyState total={users.length}/>
+                        <Table items={filterUsers} columns={columns} paging={paging}
+                            onChangePanging={pagingController()}/>
+                    </main>
+                </div>
+            </React.Fragment>
+        )
+    } else {
+        return <Loader fixed/>
+    }
 }
 
 export default FastCompany

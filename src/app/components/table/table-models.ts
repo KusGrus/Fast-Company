@@ -6,6 +6,7 @@ export interface Column {
     path?: string;
     componentFn?: Function
     sort?: Sorting
+    link?: string
 }
 
 export interface SortFieldState {
