@@ -17,9 +17,10 @@ export interface QualitiesListProps {
 
 export interface TextFormControl {
     label: string;
-    type: string;
+    type?: string;
     name: string;
     value: string;
+    error?: string;
     onChange: (event: BaseSyntheticEvent)=> void;
 }
 
