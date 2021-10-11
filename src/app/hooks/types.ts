@@ -4,7 +4,7 @@ export type ValidatorFn = (value: any) => (Error | null)
 export type UseFormRegisterFn = (fn: ValidatorFn[]) => (element: HTMLInputElement) => void
 export type UseFormChangeFn = (event: BaseSyntheticEvent) => void
 export type UseFormSubmitFn = (fn: Function) => (event: BaseSyntheticEvent) => void
-export type UseFormGetFn = (name: string) => UseFormGet | null
+export type UseFormGetFn = (name: string) => FormControl | null
 export type UseFormCheckValidityFn = () => void
 
 export interface FormControl {
@@ -13,14 +13,9 @@ export interface FormControl {
     validators?: ValidatorFn[]
 }
 
-export interface UseFormGet {
-    value: any
-    errors?: {[field: string]: Error[]}
-    currentError?: {code: string, message?: string}
-}
-
 export interface Error {
-    [code: string]: string | boolean
+    code: string
+    message?: string
 }
 
 export interface UseForm {
@@ -29,7 +24,6 @@ export interface UseForm {
     checkValidity: UseFormCheckValidityFn
     change: UseFormChangeFn
     submit: UseFormSubmitFn
-    errors: {[field: string]: Error[]}
     state: {[key: string]: FormControl}
 }
 

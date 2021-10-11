@@ -32,7 +32,7 @@ const Login = () => {
                         ])}
                         label="Email"
                         name="email"
-                        error={emailControl?.currentError?.message}
+                        error={emailControl?.errors[0]?.message}
                         value={emailControl?.value}
                         onChange={handleChange}/>
                         <TextField ref={register([
@@ -42,7 +42,7 @@ const Login = () => {
                         label="Password"
                         type="password"
                         name="password"
-                        error={passwordControl?.currentError?.message}
+                        error={passwordControl?.errors[0]?.message}
                         value={passwordControl?.value}
                         onChange={handleChange}/>
                         <button type="submit" className="btn btn-primary w-100 mx-auto">Submit</button>

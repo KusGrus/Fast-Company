@@ -6,38 +6,38 @@ interface ValidatorConfig {
 
 function max(n: number, config?: ValidatorConfig): ValidatorFn {
     return (value: string | number) => {
-        const errorValue = config?.message || true
+        const message = config?.message || ''
         if (typeof value === 'string') {
-            return value.length > n ? { max: errorValue } : null
+            return value.length > n ? { code: 'max', message } : null
         } else {
-            return value > n ? { max: errorValue } : null
+            return value > n ? { code: 'max', message } : null
         }
     }
 }
 
 function min(n: number, config?: ValidatorConfig): ValidatorFn {
     return (value: string | number) => {
-        const errorValue = config?.message || true
+        const message = config?.message || ''
         if (typeof value === 'string') {
-            return value.length < n ? { min: errorValue } : null
+            return value.length < n ? { code: 'min', message } : null
         } else {
-            return value < n ? { min: errorValue } : null
+            return value < n ? { code: 'min', message } : null
         }
     }
 }
 
 function email(config?: ValidatorConfig): ValidatorFn {
     return (value: string) => {
-        const errorValue = config?.message || true
+        const message = config?.message || ''
         const regExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        return regExp.test(value) ? null : { email: errorValue }
+        return regExp.test(value) ? null : { code: 'email', message }
     }
 }
 
 function required(config?: ValidatorConfig): ValidatorFn {
     return (value: string) => {
-        const errorValue = config?.message || true
-        return value.length ? null : { required: errorValue }
+        const message = config?.message || ''
+        return value.length ? null : { code: 'required', message }
     }
 }
 
