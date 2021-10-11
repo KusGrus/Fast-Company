@@ -10,6 +10,7 @@ import { Column, Paging, TableItem } from './table/table-models'
 import { FilterMap, ItemForMark, TableItemWithQuality } from './types'
 import Loader from './loader/Loader'
 import { Link } from 'react-router-dom'
+import useForm from '../hooks/useForm'
 
 const FastCompany = () => {
     const [columns] = useState<Column[]>([
@@ -45,10 +46,17 @@ const FastCompany = () => {
             </button>)
         }
     ])
+    const { register, change, state } = useForm()
     const [users, setUsers] = useState<UserDTO[]>([])
     const [professions, setProfessions] = useState<ProfessionDTO[]>([])
     const [paging, setPaging] = useState<Paging>({ count: 5, page: 1 })
     const [filters, setFilters] = useState<FilterMap>({})
+
+    const filterUsers = users
+        .filter((user: { [key: string]: any }) =>
+            Object.keys(filters).every(prop => user[prop]?._id === filters[prop]._id)
+        )
+        .filter(item => item?.name?.toLowerCase()?.trim().includes((state.search?.value || '').toLowerCase().trim()))
 
     useEffect(() => {
         api.users.fetchAll().then((data: any) => setUsers(data))
@@ -57,6 +65,11 @@ const FastCompany = () => {
     useEffect(() => {
         api.professions.fetchAll().then((data: any) => setProfessions(data))
     }, [])
+
+    useEffect(() => {
+        setFilters({})
+    }, [state.search?.value])
+
 
     const handleDelete = (id: string) => setUsers(prevState => prevState.filter((user) => user._id !== id))
     const handleMark = (user: ItemForMark) => setUsers(prevState => {
@@ -96,16 +109,12 @@ const FastCompany = () => {
     const handleReset = () => {
         setFilters({})
         setPaging({ count: 5, page: 1 })
+        state.search.patchValue('')
     }
-
-    const filterUsers = users.filter((user: { [key: string]: any }) =>
-        Object.keys(filters).every(prop => user[prop]?._id === filters[prop]._id)
-    )
 
     if (users.length) {
         return (
             <React.Fragment>
-                {}
                 <div className="flex-container">
                     <aside>
                         <button onClick={handleReset} type="button" className="btn btn-primary">Reset</button>
@@ -118,6 +127,14 @@ const FastCompany = () => {
                     </aside>
                     <main className="flex-column">
                         <CompanyState total={users.length}/>
+                        <div className="input-group mb-3 mt-3">
+                            <span className="input-group-text">Search</span>
+                            <input type="text"
+                                className="form-control"
+                                name="search"
+                                placeholder="Search"
+                                ref={register()} onChange={change}/>
+                        </div>
                         <Table items={filterUsers} columns={columns} paging={paging}
                             onChangePanging={pagingController()}/>
                     </main>

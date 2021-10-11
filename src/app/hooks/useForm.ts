@@ -20,6 +20,25 @@ const useForm = (config?: UseFormConfig): UseForm => {
         return Object.keys(formGroup).reduce((acc, key) => ({ ...acc, [key]: formGroup[key].value }), {})
     }
 
+    const get: UseFormGetFn = (name: string) => {
+        return formGroup[name] || null
+    }
+
+    const patchValue = (name: string) => {
+        return (value: string) => {
+            setFormGroup(prevState => {
+                prevState[name].nativeElement.value = value
+                return {
+                    ...prevState,
+                    [name]: {
+                        ...prevState[name],
+                        value
+                    }
+                }
+            })
+        }
+    }
+
     const register: UseFormRegisterFn = (validators: ValidatorFn[] = []) => {
         return (el: HTMLInputElement) => {
             if (el) {
@@ -29,6 +48,8 @@ const useForm = (config?: UseFormConfig): UseForm => {
                         ...prevState,
                         [name]: {
                             value: el?.value,
+                            patchValue: patchValue(name),
+                            nativeElement: el,
                             validators: validators,
                             errors: validateField({ validators }, el?.value)
                         }
@@ -45,8 +66,8 @@ const useForm = (config?: UseFormConfig): UseForm => {
             setFormGroup(prevState => ({
                 ...prevState,
                 [name]: {
+                    ...prevState[name],
                     value: el?.value,
-                    validators: prevState[name].validators,
                     errors: validateField(prevState[name], el?.value)
                 }
             }))
@@ -63,10 +84,6 @@ const useForm = (config?: UseFormConfig): UseForm => {
                 fn(parseForm())
             }
         }
-    }
-
-    const get: UseFormGetFn = (name: string) => {
-        return formGroup[name] || null
     }
 
     const validateField = (control: Pick<FormControl, 'validators'>, newValue: any): Error[] => {
@@ -88,6 +105,7 @@ const useForm = (config?: UseFormConfig): UseForm => {
         checkValidity()
         return !Object.keys(formGroup).some(key => formGroup[key]?.errors?.length)
     }
+
 
     return {
         register,
