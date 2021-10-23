@@ -1,5 +1,5 @@
 import React from 'react'
-import NavBar from './components/NavBar'
+import NavBar from './components/ui/NavBar'
 import { Route } from 'react-router-dom'
 import Main from './layouts/Main'
 import Login from './layouts/Login'
@@ -10,7 +10,7 @@ const App = () => {
         <React.Fragment>
             <NavBar/>
             <Route path="/" component={Main} exact/>
-            <Route path="/login" component={Login}/>
+            <Route path="/login/:type?" component={Login}/>
             <Route path="/users/:id?" component={Users}/>
         </React.Fragment>
     )

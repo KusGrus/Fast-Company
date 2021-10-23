@@ -1,52 +1,42 @@
-import React from 'react'
-import TextField from '../components/TextField'
-import useForm from '../hooks/useForm'
-import Validators from '../common/validators'
+import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import RegisterForm from '../components/ui/RegisterForm'
+import LoginForm from '../components/ui/LoginForm'
+
+enum FormType {
+    LOGIN = 'login',
+    REGISTER = 'register',
+}
 
 const Login = () => {
-    const {
-        register,
-        get,
-        change: handleChange,
-        submit: handleSubmit
-    } = useForm()
+    const { type } = useParams<{ type: FormType }>()
+    const [formType, setFormType] = useState<FormType>(type === FormType.REGISTER ? type : FormType.LOGIN)
 
-    const onSubmit = (data: any) => {
-        console.log(data)
+    let title
+    let Form
+    let message
+
+    const toggleFormType = () => {
+        setFormType(prevState => prevState === FormType.REGISTER ? FormType.LOGIN : FormType.REGISTER)
     }
 
-    const emailControl = get('email')
-    const passwordControl = get('password')
-
-    const requiredText = 'This field is required'
+    if (formType === FormType.REGISTER) {
+        title = 'Register'
+        Form = RegisterForm
+        message = <p>Already have account? <a role="button" onClick={toggleFormType}>Sign In</a></p>
+    } else {
+        title = 'Login'
+        Form = LoginForm
+        message = <p>Dont have account? <a role="button" onClick={toggleFormType}>Sign Up</a></p>
+    }
 
     return (
         <div className="container mt-5">
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
-                    <h3 className="mb-4">Login</h3>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <TextField ref={register([
-                            Validators.required({ message: requiredText }),
-                            Validators.email({ message: 'Incorrect e-mail!' })
-                        ])}
-                        label="Email"
-                        name="email"
-                        error={emailControl?.errors[0]?.message}
-                        value={emailControl?.value}
-                        onChange={handleChange}/>
-                        <TextField ref={register([
-                            Validators.required({ message: requiredText }),
-                            Validators.min(8, { message: 'Minimum of 8 characters!' })
-                        ])}
-                        label="Password"
-                        type="password"
-                        name="password"
-                        error={passwordControl?.errors[0]?.message}
-                        value={passwordControl?.value}
-                        onChange={handleChange}/>
-                        <button type="submit" className="btn btn-primary w-100 mx-auto">Submit</button>
-                    </form>
+                    <h3 className="mb-4">{title}</h3>
+                    <Form/>
+                    {message}
                 </div>
             </div>
         </div>

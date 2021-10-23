@@ -1,6 +1,6 @@
 import React from 'react'
-import Utils from '../common/utils'
-import { CompanyStateProps } from './types'
+import Utils from '../../common/utils'
+import { CompanyStateProps } from '../types'
 
 const CompanyState = ({ total }: CompanyStateProps) => {
     const getClasses = (num: number) => {

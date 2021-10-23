@@ -1,6 +1,6 @@
 import React from 'react'
-import { FiltersGroupProps } from './types'
-import { ObjectDTO } from '../../api/fake.api/user.api.model'
+import { FiltersGroupProps } from '../types'
+import { ObjectDTO } from '../../../api/fake.api/user.api.model'
 
 const FiltersGroup = ({ code, filters, selected, onSelect }: FiltersGroupProps) => {
     const isArray = Array.isArray(filters)

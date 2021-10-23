@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import api from '../../api'
-import { UserCardProps } from './types'
-import { UserDTO } from '../../api/fake.api/user.api.model'
-import Loader from './loader/Loader'
-import QualitiesList from './table/QualitiesList'
+import api from '../../../../api'
+import { UserCardProps } from '../../types'
+import { UserDTO } from '../../../../api/fake.api/user.api.model'
+import Loader from '../../common/loader/Loader'
+import QualitiesList from '../../common/QualitiesList'
 import { Link } from 'react-router-dom'
 
 const UserCard = ({ id }: UserCardProps) => {

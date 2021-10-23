@@ -1,5 +1,5 @@
 import React from 'react'
-import { BookmarkProps } from './types'
+import { BookmarkProps } from '../types'
 
 const Bookmark = ({ user, onMark }: BookmarkProps) => {
     const baseClasses = 'bi bi-bookmark'

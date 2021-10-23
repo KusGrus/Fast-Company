@@ -6,7 +6,7 @@ import {
     UseFormChangeFn,
     UseFormCheckValidityFn,
     UseFormConfig,
-    UseFormGetFn,
+    UseFormGetFn, UseFormRegisterControlFn,
     UseFormRegisterFn,
     UseFormSubmitFn,
     ValidatorFn
@@ -27,7 +27,9 @@ const useForm = (config?: UseFormConfig): UseForm => {
     const patchValue = (name: string) => {
         return (value: string) => {
             setFormGroup(prevState => {
-                prevState[name].nativeElement.value = value
+                if (prevState[name].nativeElement) {
+                    prevState[name].nativeElement!.value = value
+                }
                 return {
                     ...prevState,
                     [name]: {
@@ -43,7 +45,11 @@ const useForm = (config?: UseFormConfig): UseForm => {
         return (el: HTMLInputElement) => {
             if (el) {
                 const name = el?.getAttribute('name') as string
-                if (!formGroup[name]) {
+                if (el?.getAttribute('type') === 'radio' && !el.checked) {
+                    return
+                }
+
+                if (!formGroup[name] && el) {
                     setFormGroup(prevState => ({
                         ...prevState,
                         [name]: {
@@ -59,23 +65,50 @@ const useForm = (config?: UseFormConfig): UseForm => {
         }
     }
 
-    const handleChange: UseFormChangeFn = (event: BaseSyntheticEvent) => {
-        const el = event.target
-        const name = el.getAttribute('name') as string
+    const registryControl: UseFormRegisterControlFn = (name: string, defaultValue?: any, validators?: ValidatorFn[]) => {
+        validators = validators || []
+        return (el: HTMLInputElement) => {
+            if (!formGroup[name] && el) {
+                setFormGroup(prevState => ({
+                    ...prevState,
+                    [name]: {
+                        value: defaultValue,
+                        patchValue: patchValue(name),
+                        validators: validators,
+                        parentElement: el,
+                        errors: validateField({ validators }, defaultValue)
+                    }
+                }))
+            }
+        }
+    }
+
+    const handleChange: UseFormChangeFn = (event: BaseSyntheticEvent | string, newValue?: any) => {
+        let value: any
+        let name: string
+        if (typeof event === 'string') {
+            name = event
+            value = newValue
+        } else {
+            name = event.target.getAttribute('name') as string
+            value = event.target.value
+        }
         if (formGroup[name]) {
             setFormGroup(prevState => ({
                 ...prevState,
                 [name]: {
                     ...prevState[name],
-                    value: el?.value,
-                    errors: validateField(prevState[name], el?.value)
+                    value,
+                    errors: validateField(prevState[name], value)
                 }
             }))
         }
+        console.log(formGroup)
     }
 
     const handleSubmit: UseFormSubmitFn = (fn: Function) => {
         return (event: BaseSyntheticEvent) => {
+            console.log(formGroup)
             event.preventDefault()
             setSubmitCount(prevState => ++prevState)
             if (config?.submitAnyway) {
@@ -109,6 +142,7 @@ const useForm = (config?: UseFormConfig): UseForm => {
 
     return {
         register,
+        registerControl: registryControl,
         get,
         checkValidity,
         change: handleChange,

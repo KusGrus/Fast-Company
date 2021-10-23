@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import Table from './table/Table'
-import Bookmark from './Bookmark'
-import CompanyState from './CompanyState'
-import FiltersGroup from './FiltersGroup'
-import QualitiesList from './table/QualitiesList'
-import api from '../../api'
-import { ObjectDTO, ProfessionDTO, UserDTO } from '../../api/fake.api/user.api.model'
-import { Column, Paging, TableItem } from './table/table-models'
-import { FilterMap, ItemForMark, TableItemWithQuality } from './types'
-import Loader from './loader/Loader'
+import Bookmark from '../../common/Bookmark'
+import Table from '../../common/table'
+import CompanyState from '../../common/CompanyState'
+import FiltersGroup from '../../common/FiltersGroup'
+import QualitiesList from '../../common/QualitiesList'
+import api from '../../../../api'
+import { ObjectDTO, ProfessionDTO, UserDTO } from '../../../../api/fake.api/user.api.model'
+import { Column, Paging, TableItem } from '../../common/table/table-models'
+import { FilterMap, ItemForMark, TableItemWithQuality } from '../../types'
+import Loader from '../../common/loader/Loader'
 import { Link } from 'react-router-dom'
-import useForm from '../hooks/useForm'
+import useForm from '../../../hooks/useForm'
 
-const FastCompany = () => {
+
+const UserList = () => {
     const [columns] = useState<Column[]>([
         {
             code: 'name',
@@ -135,7 +136,9 @@ const FastCompany = () => {
                                 placeholder="Search"
                                 ref={register()} onChange={change}/>
                         </div>
-                        <Table items={filterUsers} columns={columns} paging={paging}
+                        <Table items={filterUsers}
+                            columns={columns}
+                            paging={paging}
                             onChangePanging={pagingController()}/>
                     </main>
                 </div>
@@ -146,4 +149,4 @@ const FastCompany = () => {
     }
 }
 
-export default FastCompany
+export default UserList

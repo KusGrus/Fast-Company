@@ -1,5 +1,5 @@
 import React, { ForwardedRef } from 'react'
-import { TextFormControl } from './types'
+import { TextFormControl } from '../../types'
 
 const TextField = React.forwardRef(({ label, type = 'text', name, error, value, onChange }: TextFormControl, ref:ForwardedRef<any>) => (
     <div className="mb-4">

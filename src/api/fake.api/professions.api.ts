@@ -19,7 +19,7 @@ export const professions: ProfessionDTO[] = [
 ]
 
 const fetchAll: () => Promise<ProfessionDTO[] | ProfessionMap<ProfessionDTO>> = () => new Promise(resolve => {
-    window.setTimeout(() => resolve(professions), 3000)
+    window.setTimeout(() => resolve(professions), 100)
 })
 
 export default {

@@ -1,6 +1,7 @@
-import { TableItem } from './table/table-models'
+import { TableItem } from './common/table/table-models'
 import { ObjectDTO, QualityDTO } from '../../api/fake.api/user.api.model'
 import { BaseSyntheticEvent } from 'react'
+import { UseFormChangeFn, UseFormRegisterControlFn } from '../hooks/types'
 
 export interface BookmarkProps {
     user: ItemForMark;
@@ -15,13 +16,27 @@ export interface QualitiesListProps {
     qualities: QualityDTO[];
 }
 
-export interface TextFormControl {
+export interface FormControl {
     label: string;
-    type?: string;
     name: string;
-    value: string;
+    value?: any;
     error?: string;
-    onChange: (event: BaseSyntheticEvent)=> void;
+    instance?: FormControl;
+    onChange: UseFormChangeFn;
+}
+
+export interface TextFormControl extends FormControl {
+    type?: string;
+}
+
+export interface SelectFormControl extends FormControl {
+    items: ObjectDTO[];
+    value?: ObjectDTO;
+}
+
+export interface RadioFormControl extends FormControl {
+    items: ObjectDTO[];
+    value?: ObjectDTO;
 }
 
 export interface UserCardProps {

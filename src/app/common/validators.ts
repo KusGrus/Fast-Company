@@ -35,9 +35,17 @@ function email(config?: ValidatorConfig): ValidatorFn {
 }
 
 function required(config?: ValidatorConfig): ValidatorFn {
-    return (value: string) => {
+    return (value: any) => {
+        let valid
+        if (Array.isArray(value)) {
+            valid = value.length
+        } else if (typeof value === 'number' || typeof value === 'string') {
+            valid = !!value
+        } else {
+            valid = Object.keys(value).length
+        }
         const message = config?.message || ''
-        return value.length ? null : { code: 'required', message }
+        return valid ? null : { code: 'required', message }
     }
 }
 
