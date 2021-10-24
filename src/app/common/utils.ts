@@ -1,3 +1,5 @@
+import { ObjectDTO, QualitiesMap, QualityDTO } from '../../api/fake.api/user.api.model'
+
 function declOfNum(num: number, textForms: string[]): string {
     num = Math.abs(num) % 100
     const n = num % 10
@@ -13,6 +15,11 @@ function declOfNum(num: number, textForms: string[]): string {
     return textForms[2]
 }
 
+function convertQualities(qualities:QualitiesMap<QualityDTO>): ObjectDTO[] {
+    return Object.keys(qualities).map(key => qualities[key])
+}
+
 export default {
-    declOfNum
+    declOfNum,
+    convertQualities
 }

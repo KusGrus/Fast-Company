@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import RegisterForm from '../components/ui/RegisterForm'
 import LoginForm from '../components/ui/LoginForm'
+import Form from '../components/common/Form'
 
 enum FormType {
     LOGIN = 'login',
@@ -13,7 +14,7 @@ const Login = () => {
     const [formType, setFormType] = useState<FormType>(type === FormType.REGISTER ? type : FormType.LOGIN)
 
     let title
-    let Form
+    let FormSection
     let message
 
     const toggleFormType = () => {
@@ -22,25 +23,15 @@ const Login = () => {
 
     if (formType === FormType.REGISTER) {
         title = 'Register'
-        Form = RegisterForm
+        FormSection = RegisterForm
         message = <p>Already have account? <a role="button" onClick={toggleFormType}>Sign In</a></p>
     } else {
         title = 'Login'
-        Form = LoginForm
+        FormSection = LoginForm
         message = <p>Dont have account? <a role="button" onClick={toggleFormType}>Sign Up</a></p>
     }
 
-    return (
-        <div className="container mt-5">
-            <div className="row">
-                <div className="col-md-6 offset-md-3 shadow p-4">
-                    <h3 className="mb-4">{title}</h3>
-                    <Form/>
-                    {message}
-                </div>
-            </div>
-        </div>
-    )
+    return <Form title={title}><FormSection/>{message}</Form>
 }
 
 export default Login

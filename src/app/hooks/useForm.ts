@@ -6,7 +6,7 @@ import {
     UseFormChangeFn,
     UseFormCheckValidityFn,
     UseFormConfig,
-    UseFormGetFn, UseFormRegisterControlFn,
+    UseFormGetFn,
     UseFormRegisterFn,
     UseFormSubmitFn,
     ValidatorFn
@@ -25,7 +25,7 @@ const useForm = (config?: UseFormConfig): UseForm => {
     }
 
     const patchValue = (name: string) => {
-        return (value: string) => {
+        return (value: any) => {
             setFormGroup(prevState => {
                 if (prevState[name].nativeElement) {
                     prevState[name].nativeElement!.value = value
@@ -41,44 +41,46 @@ const useForm = (config?: UseFormConfig): UseForm => {
         }
     }
 
-    const register: UseFormRegisterFn = (validators: ValidatorFn[] = []) => {
-        return (el: HTMLInputElement) => {
-            if (el) {
-                const name = el?.getAttribute('name') as string
-                if (el?.getAttribute('type') === 'radio' && !el.checked) {
-                    return
-                }
-
-                if (!formGroup[name] && el) {
-                    setFormGroup(prevState => ({
-                        ...prevState,
-                        [name]: {
-                            value: el?.value,
-                            patchValue: patchValue(name),
-                            nativeElement: el,
-                            validators: validators,
-                            errors: validateField({ validators }, el?.value)
-                        }
-                    }))
-                }
-            }
-        }
-    }
-
-    const registryControl: UseFormRegisterControlFn = (name: string, defaultValue?: any, validators?: ValidatorFn[]) => {
-        validators = validators || []
-        return (el: HTMLInputElement) => {
-            if (!formGroup[name] && el) {
-                setFormGroup(prevState => ({
-                    ...prevState,
-                    [name]: {
-                        value: defaultValue,
-                        patchValue: patchValue(name),
-                        validators: validators,
-                        parentElement: el,
-                        errors: validateField({ validators }, defaultValue)
+    const register: UseFormRegisterFn = (defaultValue: any, validators: ValidatorFn[] = []) => {
+        return (element: HTMLInputElement | string) => {
+            if (element) {
+                if (typeof element === 'string') {
+                    if (!formGroup[element]) {
+                        setFormGroup(prevState => ({
+                            ...prevState,
+                            [element]: {
+                                value: defaultValue,
+                                patchValue: patchValue(element),
+                                validators: validators,
+                                errors: validateField({ validators }, defaultValue)
+                            }
+                        }))
                     }
-                }))
+                } else {
+                    if (element.getAttribute('type') === 'radio' && !element.checked) {
+                        return
+                    }
+                    let value: any
+                    const name = element.getAttribute('name') as string
+                    if (element.getAttribute('type') === 'checkbox') {
+                        value = defaultValue || element.checked
+                        element.checked = defaultValue || element.checked
+                    } else {
+                        value = defaultValue || element?.value
+                    }
+                    if (!formGroup[name] && element) {
+                        setFormGroup(prevState => ({
+                            ...prevState,
+                            [name]: {
+                                value: value,
+                                patchValue: patchValue(name),
+                                nativeElement: element,
+                                validators: validators,
+                                errors: validateField({ validators }, value)
+                            }
+                        }))
+                    }
+                }
             }
         }
     }
@@ -91,7 +93,11 @@ const useForm = (config?: UseFormConfig): UseForm => {
             value = newValue
         } else {
             name = event.target.getAttribute('name') as string
-            value = event.target.value
+            if (event.target.getAttribute('type') === 'checkbox') {
+                value = event.target.checked
+            } else {
+                value = newValue || event.target.value
+            }
         }
         if (formGroup[name]) {
             setFormGroup(prevState => ({
@@ -103,12 +109,10 @@ const useForm = (config?: UseFormConfig): UseForm => {
                 }
             }))
         }
-        console.log(formGroup)
     }
 
     const handleSubmit: UseFormSubmitFn = (fn: Function) => {
         return (event: BaseSyntheticEvent) => {
-            console.log(formGroup)
             event.preventDefault()
             setSubmitCount(prevState => ++prevState)
             if (config?.submitAnyway) {
@@ -142,7 +146,6 @@ const useForm = (config?: UseFormConfig): UseForm => {
 
     return {
         register,
-        registerControl: registryControl,
         get,
         checkValidity,
         change: handleChange,

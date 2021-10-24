@@ -13,26 +13,29 @@ export type Qualities =
     | 'alcoholic'
     | 'handsome'
     | 'uncertain'
+    | string
 
 export type ProfessionMap<T> = Record<Professions, T>
 export type QualitiesMap<T> = Record<Qualities, T>
 
 export interface ObjectDTO {
-    _id: string
-    name: string
+    _id: string;
+    name: string;
 }
 
 export interface ProfessionDTO extends ObjectDTO {
 }
 
 export interface QualityDTO extends ObjectDTO {
-    color: string
+    color: string;
 }
 
 export interface UserDTO extends ObjectDTO {
-    profession: ProfessionDTO
-    qualities: QualityDTO[]
-    completedMeetings: number
-    rate: number
-    bookmark: boolean
+    email: string;
+    sex: 'male' | 'female' | 'other';
+    profession: ProfessionDTO;
+    qualities: QualityDTO[];
+    completedMeetings: number;
+    rate: number;
+    bookmark: boolean;
 }

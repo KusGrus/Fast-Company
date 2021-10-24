@@ -1,7 +1,6 @@
 import { TableItem } from './common/table/table-models'
-import { ObjectDTO, QualityDTO } from '../../api/fake.api/user.api.model'
-import { BaseSyntheticEvent } from 'react'
-import { UseFormChangeFn, UseFormRegisterControlFn } from '../hooks/types'
+import { ObjectDTO, QualityDTO, UserDTO } from '../../api/fake.api/user.api.model'
+import { UseFormChangeFn } from '../hooks/types'
 
 export interface BookmarkProps {
     user: ItemForMark;
@@ -16,13 +15,35 @@ export interface QualitiesListProps {
     qualities: QualityDTO[];
 }
 
+export interface UserProfileProps {
+    user: UserDTO;
+}
+
+export interface UserEditProps {
+    user: UserDTO;
+    onUpdate: (data: any) => void;
+}
+
+
+export interface UserCardProps {
+    id: string;
+}
+
+export interface FiltersGroupProps {
+    code: string;
+    filters: ObjectDTO[] | { [key: string]: ObjectDTO };
+    selected: ObjectDTO;
+    onSelect: (code: string, item: ObjectDTO) => any;
+}
+
+
 export interface FormControl {
     label: string;
     name: string;
     value?: any;
     error?: string;
-    instance?: FormControl;
     onChange: UseFormChangeFn;
+    registry?: (name: string, value?: any) => void;
 }
 
 export interface TextFormControl extends FormControl {
@@ -34,20 +55,18 @@ export interface SelectFormControl extends FormControl {
     value?: ObjectDTO;
 }
 
+export interface MultiSelectFormControl extends FormControl {
+    items: ObjectDTO[];
+    values?: any;
+}
+
 export interface RadioFormControl extends FormControl {
     items: ObjectDTO[];
-    value?: ObjectDTO;
+    value?: string;
 }
 
-export interface UserCardProps {
-    id: string;
-}
-
-export interface FiltersGroupProps {
-    code: string;
-    filters: ObjectDTO[] | { [key: string]: ObjectDTO };
-    selected: ObjectDTO;
-    onSelect: (code: string, item: ObjectDTO) => any;
+export interface CheckBoxFormControl extends FormControl {
+    value?: boolean;
 }
 
 export interface ItemForMark extends TableItem {
@@ -61,3 +80,14 @@ export interface FilterMap {
 export interface TableItemWithQuality extends TableItem {
     qualities: QualityDTO[];
 }
+
+export interface Gender {
+    name: string;
+    _id: string;
+}
+
+export const genderOptions: Gender[] = [
+    { name: 'Male', _id: 'male' },
+    { name: 'Female', _id: 'female' },
+    { name: 'Other', _id: 'other' }
+]

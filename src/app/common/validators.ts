@@ -1,7 +1,7 @@
 import { ValidatorFn } from '../hooks/types'
 
 interface ValidatorConfig {
-    message?: string
+    message?: string;
 }
 
 function max(n: number, config?: ValidatorConfig): ValidatorFn {
@@ -39,7 +39,7 @@ function required(config?: ValidatorConfig): ValidatorFn {
         let valid
         if (Array.isArray(value)) {
             valid = value.length
-        } else if (typeof value === 'number' || typeof value === 'string') {
+        } else if (typeof value === 'number' || typeof value === 'string' || typeof value === 'boolean') {
             valid = !!value
         } else {
             valid = Object.keys(value).length
