@@ -4,18 +4,16 @@ import RadioField from '../common/form/RadioField'
 import MultiSelectField from '../common/form/MultiSelectField'
 import Form from '../common/Form'
 import api from '../../../api'
-import TextField from '../common/form/TextField'
+import InputField from '../common/form/InputField'
 import SelectField from '../common/form/SelectField'
 import Validators from '../../common/validators'
 import utils from '../../common/utils'
-import { Gender, genderOptions, UserEditProps } from '../types'
-import { ObjectDTO, ProfessionDTO } from '../../../api/fake.api/user.api.model'
+import { genderOptions, requiredText, UserEditProps } from '../types'
+import { ObjectDTO, ProfessionDTO } from '../../../api/fake.api/api.model'
 
 const UserForm = ({ user, onUpdate }: UserEditProps) => {
     const [professions, setProfessions] = useState<ProfessionDTO[]>([])
     const [qualities, setQualities] = useState<ObjectDTO[]>([])
-    const gender: Gender[] = genderOptions
-    const requiredText = 'This field is required'
     const { register, get, change: handleChange, submit: handleSubmit } = useForm()
 
     const nameControl = get('name')
@@ -34,14 +32,14 @@ const UserForm = ({ user, onUpdate }: UserEditProps) => {
     return (
         <Form title="Edit user">
             <form onSubmit={handleSubmit(onSubmit)}>
-                <TextField label="Name"
+                <InputField label="Name"
                     ref={register(user.name, [Validators.required({ message: requiredText })])}
                     name="name"
                     error={nameControl?.errors[0]?.message}
                     value={nameControl?.value}
                     onChange={handleChange}/>
 
-                <TextField label="Email"
+                <InputField label="Email"
                     ref={register(user.email, [
                         Validators.required({ message: requiredText }),
                         Validators.email({ message: 'Incorrect e-mail!' })])}
@@ -60,7 +58,7 @@ const UserForm = ({ user, onUpdate }: UserEditProps) => {
                     onChange={handleChange}/>
 
                 <RadioField label="Gender"
-                    items={gender}
+                    items={genderOptions}
                     registry={register(user.sex)}
                     name="sex"
                     value={sexControl?.value}

@@ -1,4 +1,4 @@
-import { UserDTO } from './user.api.model'
+import { UserDTO } from './api.model'
 import { professionsObject as professions } from './professions.api'
 import { qualities } from './qualities.api'
 

@@ -1,6 +1,8 @@
 import { TableItem } from './common/table/table-models'
-import { ObjectDTO, QualityDTO, UserDTO } from '../../api/fake.api/user.api.model'
+import { CommentDTO, ObjectDTO, QualityDTO, UserDTO } from '../../api/fake.api/api.model'
 import { UseFormChangeFn } from '../hooks/types'
+
+export const requiredText = 'This field is required'
 
 export interface BookmarkProps {
     user: ItemForMark;
@@ -29,6 +31,17 @@ export interface UserCardProps {
     id: string;
 }
 
+export interface CommentFormProps {
+    users: UserDTO[];
+    onSend: (data: any) => void;
+}
+
+export interface CommentProps {
+    user: UserDTO | undefined;
+    comment: CommentDTO;
+    onDelete: (id: string)=>void
+}
+
 export interface FiltersGroupProps {
     code: string;
     filters: ObjectDTO[] | { [key: string]: ObjectDTO };
@@ -38,7 +51,7 @@ export interface FiltersGroupProps {
 
 
 export interface FormControl {
-    label: string;
+    label?: string;
     name: string;
     value?: any;
     error?: string;
@@ -46,8 +59,12 @@ export interface FormControl {
     registry?: (name: string, value?: any) => void;
 }
 
-export interface TextFormControl extends FormControl {
+export interface InputFormControl extends FormControl {
     type?: string;
+}
+
+export interface TextAreaFormControl extends FormControl {
+    placeholder?: string
 }
 
 export interface SelectFormControl extends FormControl {

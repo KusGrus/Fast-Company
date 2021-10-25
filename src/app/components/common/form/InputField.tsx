@@ -1,7 +1,7 @@
 import React, { ForwardedRef } from 'react'
-import { TextFormControl } from '../../types'
+import { InputFormControl } from '../../types'
 
-const TextField = React.forwardRef(({ label, type = 'text', name, error, value, onChange }: TextFormControl, ref:ForwardedRef<any>) => (
+const InputField = React.forwardRef(({ label, type = 'text', name, error, value, onChange }: InputFormControl, ref:ForwardedRef<any>) => (
     <div className="mb-4">
         <label className="form-label"
             htmlFor={name}>
@@ -18,4 +18,4 @@ const TextField = React.forwardRef(({ label, type = 'text', name, error, value, 
     </div>
 ))
 
-export default TextField
+export default InputField

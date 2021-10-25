@@ -1,4 +1,4 @@
-import { ObjectDTO, QualitiesMap, QualityDTO } from '../../api/fake.api/user.api.model'
+import { ObjectDTO, QualitiesMap, QualityDTO } from '../../api/fake.api/api.model'
 
 function declOfNum(num: number, textForms: string[]): string {
     num = Math.abs(num) % 100

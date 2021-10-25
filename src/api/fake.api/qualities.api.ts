@@ -1,4 +1,4 @@
-import { QualitiesMap, QualityDTO } from './user.api.model'
+import { QualitiesMap, QualityDTO } from './api.model'
 
 export const qualities: QualitiesMap<QualityDTO> = {
     tedious: { _id: '67rdca3eeb7f6fgeed471198', name: 'Нудила', color: 'primary' },

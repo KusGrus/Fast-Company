@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import useForm from '../../hooks/useForm'
-import TextField from '../common/form/TextField'
+import InputField from '../common/form/InputField'
 import Validators from '../../common/validators'
 import api from '../../../api'
-import { ObjectDTO, ProfessionDTO } from '../../../api/fake.api/user.api.model'
+import { ObjectDTO, ProfessionDTO } from '../../../api/fake.api/api.model'
 import utils from '../../common/utils'
 import SelectField from '../common/form/SelectField'
 import RadioField from '../common/form/RadioField'
 import MultiSelectField from '../common/form/MultiSelectField'
 import CheckboxField from '../common/form/CheckboxField'
-import { Gender, genderOptions } from '../types'
+import { genderOptions, requiredText } from '../types'
 
 const RegisterForm = () => {
     const [professions, setProfessions] = useState<ProfessionDTO[]>([])
     const [qualities, setQualities] = useState<ObjectDTO[]>([])
     const { register, get, change: handleChange, submit: handleSubmit } = useForm()
-
-    const requiredText = 'This field is required'
-    const gender: Gender[] = genderOptions
 
     const emailControl = get('email')
     const passwordControl = get('password')
@@ -36,7 +33,7 @@ const RegisterForm = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <TextField ref={register(null, [
+            <InputField ref={register(null, [
                 Validators.required({ message: requiredText }),
                 Validators.email({ message: 'Incorrect e-mail!' })
             ])}
@@ -46,7 +43,7 @@ const RegisterForm = () => {
             value={emailControl?.value}
             onChange={handleChange}/>
 
-            <TextField ref={register(null, [
+            <InputField ref={register(null, [
                 Validators.required({ message: requiredText }),
                 Validators.min(8, { message: 'Minimum of 8 characters!' })
             ])}
@@ -67,7 +64,7 @@ const RegisterForm = () => {
                 error={professionsControl?.errors[0]?.message}
                 onChange={handleChange}/>
 
-            <RadioField items={gender}
+            <RadioField items={genderOptions}
                 label="Gender"
                 registry={register(null)}
                 name="gender"

@@ -1,15 +1,16 @@
 import React from 'react'
 import Card from '../common/Card'
 import { UserProfileProps } from '../types'
-import { QualityDTO } from '../../../api/fake.api/user.api.model'
+import { QualityDTO } from '../../../api/fake.api/api.model'
 import { useHistory } from 'react-router-dom'
+import RandomAvatar from '../common/RandomAvatar'
 
 const UserProfile = ({ user: { name, profession, rate, qualities, completedMeetings } }: UserProfileProps) => {
     const history = useHistory()
 
     const generateQuality = (quality: QualityDTO) => {
         const classes = `badge bg-${quality.color}`
-        return <span className={classes} style={{ margin: '5px' }}>{quality.name}</span>
+        return <span className={classes} key={quality._id} style={{ margin: '5px' }}>{quality.name}</span>
     }
 
     const navigate = (url: string, relative = false) => {
@@ -31,8 +32,7 @@ const UserProfile = ({ user: { name, profession, rate, qualities, completedMeeti
                         <i className="bi bi-gear" />
                     </button>
                     <div className="d-flex flex-column align-items-center text-center position-relative">
-                        <img src="https://avatars.dicebear.com/api/avataaars/qweqwdas.svg"
-                            className="rounded-circle" width="150" alt="Avatar"/>
+                        <RandomAvatar/>
                         <div className="mt-3">
                             <h4>{name}</h4>
                             <p className="text-secondary mb-1">{profession.name}</p>

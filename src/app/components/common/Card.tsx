@@ -1,8 +1,8 @@
 import React, { PropsWithChildren } from 'react'
 
-const Card = ({ children }: PropsWithChildren<unknown>) => (
-    <div className="card mb-3" style={{ width: '100%' }}>
-        <div className="card-body d-flex flex-column justify-content-center text-center">
+const Card = ({ children, center = true }: PropsWithChildren<{ center?: boolean }>) => (
+    <div className="card mb-3" style={{ width: '100%', maxWidth: '700px' }}>
+        <div className={center ? 'card-body d-flex flex-column justify-content-center text-center' : 'card-body'}>
             {children}
         </div>
     </div>

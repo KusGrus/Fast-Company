@@ -39,3 +39,11 @@ export interface UserDTO extends ObjectDTO {
     rate: number;
     bookmark: boolean;
 }
+
+export interface CommentDTO {
+    _id: string;
+    userId: string;
+    pageId: string;
+    content: string;
+    createdAt: string;
+}

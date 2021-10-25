@@ -1,4 +1,4 @@
-import { ProfessionDTO, ProfessionMap } from './user.api.model'
+import { ProfessionDTO, ProfessionMap } from './api.model'
 
 export const professionsObject: ProfessionMap<ProfessionDTO> = {
     doctor: { _id: '67rdca3eeb7f6fgeed471818', name: 'Доктор' },

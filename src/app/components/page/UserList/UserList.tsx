@@ -5,7 +5,7 @@ import CompanyState from '../../common/CompanyState'
 import FiltersGroup from '../../common/FiltersGroup'
 import QualitiesList from '../../common/QualitiesList'
 import api from '../../../../api'
-import { ObjectDTO, ProfessionDTO, UserDTO } from '../../../../api/fake.api/user.api.model'
+import { ObjectDTO, ProfessionDTO, UserDTO } from '../../../../api/fake.api/api.model'
 import { Column, Paging, TableItem } from '../../common/table/table-models'
 import { FilterMap, ItemForMark, TableItemWithQuality } from '../../types'
 import Loader from '../../common/loader/Loader'
@@ -134,7 +134,7 @@ const UserList = () => {
                                 className="form-control"
                                 name="search"
                                 placeholder="Search"
-                                ref={register()} onChange={change}/>
+                                ref={register(null) as any} onChange={change}/>
                         </div>
                         <Table items={filterUsers}
                             columns={columns}

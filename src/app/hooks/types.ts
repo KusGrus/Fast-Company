@@ -2,7 +2,6 @@ import { BaseSyntheticEvent } from 'react'
 
 export type ValidatorFn = (value: any) => (Error | null)
 export type UseFormRegisterFn = (defaultValue: any, fn?: ValidatorFn[]) => (element: HTMLInputElement | string) => void
-export type UseFormRegisterControlFn = (fn?: ValidatorFn[]) => (name: string, value?: any) => void
 export type UseFormChangeFn = (event: (BaseSyntheticEvent | string), ...args: any[]) => void
 export type UseFormSubmitFn = (fn: Function) => (event: BaseSyntheticEvent) => void
 export type UseFormGetFn = (name: string) => FormControl | null

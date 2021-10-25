@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { MultiSelectFormControl } from '../../types'
 import Select from 'react-select'
-import { ObjectDTO } from '../../../../api/fake.api/user.api.model'
+import { ObjectDTO } from '../../../../api/fake.api/api.model'
 
 const MultiSelectField = ({ label, items, values = [], name, onChange, registry }: MultiSelectFormControl) => {
     const [list, setList] = useState <Array<{ value: any, label: string }>>([])

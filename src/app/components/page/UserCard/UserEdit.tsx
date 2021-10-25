@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { UserCardProps } from '../../types'
 import UserForm from '../../ui/UserForm'
-import { UserDTO } from '../../../../api/fake.api/user.api.model'
+import { UserDTO } from '../../../../api/fake.api/api.model'
 import api from '../../../../api'
 import { useHistory } from 'react-router-dom'
 

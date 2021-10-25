@@ -1,8 +1,9 @@
 import React from 'react'
 import useForm from '../../hooks/useForm'
-import TextField from '../common/form/TextField'
+import InputField from '../common/form/InputField'
 import Validators from '../../common/validators'
 import CheckboxField from '../common/form/CheckboxField'
+import { requiredText } from '../types'
 
 const LoginForm = () => {
     const {
@@ -19,10 +20,9 @@ const LoginForm = () => {
     const emailControl = get('email')
     const passwordControl = get('password')
 
-    const requiredText = 'This field is required'
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <TextField label="Email"
+            <InputField label="Email"
                 ref={register(null, [
                     Validators.required({ message: requiredText }),
                     Validators.email({ message: 'Incorrect e-mail!' })
@@ -32,7 +32,7 @@ const LoginForm = () => {
                 value={emailControl?.value}
                 onChange={handleChange}/>
 
-            <TextField label="Password"
+            <InputField label="Password"
                 ref={register(null, [
                     Validators.required({ message: requiredText }),
                     Validators.min(8, { message: 'Minimum of 8 characters!' })
