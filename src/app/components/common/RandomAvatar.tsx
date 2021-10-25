@@ -1,6 +1,6 @@
 import React from 'react'
 
-const RandomAvatar = ({ width = 150 }: {width?: number}) => (
+const RandomAvatar = React.memo(({ width = 150 }: {width?: number}) => (
     <img
         src={`https://avatars.dicebear.com/api/avataaars/${(
             Math.random() + 1
@@ -10,6 +10,6 @@ const RandomAvatar = ({ width = 150 }: {width?: number}) => (
         className="rounded-circle shadow-1-strong me-3"
         alt="avatar" width={width}
     />
-)
+))
 
 export default RandomAvatar

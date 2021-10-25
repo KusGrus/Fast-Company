@@ -4,7 +4,7 @@ import { UserCardProps } from '../../types'
 import { UserDTO } from '../../../../api/fake.api/api.model'
 import Loader from '../../common/loader/Loader'
 import UserProfile from '../../ui/UserProfile'
-import Comments from './Comments'
+import Comments from '../../ui/Comments'
 
 const UserCard = ({ id }: UserCardProps) => {
     const [user, setUser] = useState<UserDTO>()

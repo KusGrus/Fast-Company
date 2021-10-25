@@ -1,5 +1,20 @@
 import { ObjectDTO, QualitiesMap, QualityDTO } from '../../api/fake.api/api.model'
 
+const monthArray: string[] = [
+    'January',
+    'February',
+    'Match',
+    'April',
+    'May',
+    'June',
+    'Jule',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+]
+
 function declOfNum(num: number, textForms: string[]): string {
     num = Math.abs(num) % 100
     const n = num % 10
@@ -15,11 +30,51 @@ function declOfNum(num: number, textForms: string[]): string {
     return textForms[2]
 }
 
-function convertQualities(qualities:QualitiesMap<QualityDTO>): ObjectDTO[] {
+function convertQualities(qualities: QualitiesMap<QualityDTO>): ObjectDTO[] {
     return Object.keys(qualities).map(key => qualities[key])
+}
+
+function timeLeft(date: string | number): string {
+    if (typeof date === 'string') {
+        date = Number.parseInt(date)
+    }
+    const seconds = (Date.now() - date) / 1000
+    const days = seconds / 60 / 60 / 24
+    if (days >= 1) {
+        const targetDate = new Date(date)
+        const hhmm = `${targetDate.getHours()}:${targetDate.getMinutes()}`
+        if (days < 2) {
+            return `yesterday ${hhmm}`
+        } else {
+            const year = (days / 365) >= 1 ? ` ${targetDate.getFullYear()} ` : ' '
+            return `${targetDate.getDate()}${year}${monthArray[targetDate.getMonth()].toLowerCase()} ${hhmm}`
+        }
+    } else {
+        const info = {
+            count: 0,
+            entity: ''
+        }
+        if (seconds / 60 / 60 >= 1) {
+            info.entity = 'hour'
+            info.count = Math.round(seconds / 60 / 60)
+        } else if (seconds / 60 >= 1) {
+            info.entity = 'minute'
+            info.count = Math.round(seconds / 60)
+        } else {
+            const roundedSeconds = Math.round(seconds)
+            if (roundedSeconds < 5) {
+                info.entity = 'moment'
+            } else {
+                info.entity = 'second'
+                info.count = roundedSeconds
+            }
+        }
+        return `${info.count || ''} ${info.entity + (info.count <= 1 ? '' : 's')} ago`.trim()
+    }
 }
 
 export default {
     declOfNum,
-    convertQualities
+    convertQualities,
+    timeLeft
 }

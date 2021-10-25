@@ -2,8 +2,10 @@ import React from 'react'
 import { CommentProps } from '../types'
 import RandomAvatar from './RandomAvatar'
 import Loader from './loader/Loader'
+import utils from '../../common/utils'
 
 const Comment = ({ comment, user, onDelete }: CommentProps) => {
+    const date = utils.timeLeft(comment.createdAt)
     if (!comment || !user) {
         return <Loader/>
     } else {
@@ -17,7 +19,7 @@ const Comment = ({ comment, user, onDelete }: CommentProps) => {
                                 <div className="mb-4">
                                     <div className="d-flex justify-content-between align-items-center">
                                         <p className="mb-1">{user?.name}
-                                            <span className="small" style={{ marginLeft: '10px' }}>{new Date(comment.createdAt)}</span>
+                                            <span className="small" style={{ marginLeft: '10px' }}>{date}</span>
                                         </p>
                                         <button className="btn btn-sm text-primary d-flex align-items-center"
                                             onClick={() => onDelete(comment._id)}>
