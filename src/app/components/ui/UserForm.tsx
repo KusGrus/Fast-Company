@@ -14,13 +14,6 @@ import { ObjectDTO, ProfessionDTO } from '../../../api/fake.api/api.model'
 const UserForm = ({ user, onUpdate }: UserEditProps) => {
     const [professions, setProfessions] = useState<ProfessionDTO[]>([])
     const [qualities, setQualities] = useState<ObjectDTO[]>([])
-    const { register, get, change: handleChange, submit: handleSubmit } = useForm()
-
-    const nameControl = get('name')
-    const emailControl = get('email')
-    const professionControl = get('profession')
-    const sexControl = get('sex')
-    const qualitiesControl = get('qualities')
 
     useEffect(() => {
         api.professions.fetchAll().then((p: any) => setProfessions(p))
@@ -30,50 +23,7 @@ const UserForm = ({ user, onUpdate }: UserEditProps) => {
     const onSubmit = (data: any) => onUpdate(data)
 
     return (
-        <Form title="Edit user">
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <InputField label="Name"
-                    ref={register(user.name, [Validators.required({ message: requiredText })])}
-                    name="name"
-                    error={nameControl?.errors[0]?.message}
-                    value={nameControl?.value}
-                    onChange={handleChange}/>
-
-                <InputField label="Email"
-                    ref={register(user.email, [
-                        Validators.required({ message: requiredText }),
-                        Validators.email({ message: 'Incorrect e-mail!' })])}
-                    name="email"
-                    error={emailControl?.errors[0]?.message}
-                    value={emailControl?.value}
-                    onChange={handleChange}/>
-
-
-                <SelectField label="Profession"
-                    items={professions}
-                    name="profession"
-                    ref={register(user.profession, [Validators.required({ message: requiredText })])}
-                    value={professionControl?.value}
-                    error={professionControl?.errors[0]?.message}
-                    onChange={handleChange}/>
-
-                <RadioField label="Gender"
-                    items={genderOptions}
-                    registry={register(user.sex)}
-                    name="sex"
-                    value={sexControl?.value}
-                    onChange={handleChange}/>
-
-                <MultiSelectField items={qualities}
-                    label="Qualities"
-                    name="qualities"
-                    registry={register(user.qualities)}
-                    values={qualitiesControl?.value}
-                    onChange={handleChange}/>
-
-                <button type="submit" className="btn btn-primary w-100 mx-auto">Update</button>
-            </form>
-        </Form>
+        <h1>12</h1>
     )
 }
 

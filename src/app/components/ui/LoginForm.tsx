@@ -7,47 +7,37 @@ import { requiredText } from '../types'
 
 const LoginForm = () => {
     const {
-        register,
-        get,
-        change: handleChange,
-        submit: handleSubmit
-    } = useForm()
+        state, submit
+    } = useForm({
+        email: ['', [
+            Validators.required({ message: requiredText }),
+            Validators.email({ message: 'Incorrect e-mail!' })
+        ]],
+        password: ['', [
+            Validators.required({ message: requiredText }),
+            Validators.min(8, { message: 'Minimum of 8 characters!' })
+        ]],
+        check: [true]
+    })
 
-    const onSubmit = (data: any) => {
-        console.log(data)
-    }
-
-    const emailControl = get('email')
-    const passwordControl = get('password')
+    const onSubmit = (data: any) => console.log(data)
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={submit(onSubmit)}>
             <InputField label="Email"
-                ref={register(null, [
-                    Validators.required({ message: requiredText }),
-                    Validators.email({ message: 'Incorrect e-mail!' })
-                ])}
-                name="email"
-                error={emailControl?.errors[0]?.message}
-                value={emailControl?.value}
-                onChange={handleChange}/>
+                value={state.email.value}
+                error={state.email.errors[0]?.message}
+                onChange={state.email.patchValue}/>
 
             <InputField label="Password"
-                ref={register(null, [
-                    Validators.required({ message: requiredText }),
-                    Validators.min(8, { message: 'Minimum of 8 characters!' })
-                ])}
                 type="password"
-                name="password"
-                error={passwordControl?.errors[0]?.message}
-                value={passwordControl?.value}
-                onChange={handleChange}/>
-
+                value={state.password.value}
+                error={state.password.errors[0]?.message}
+                onChange={state.password.patchValue}/>
 
             <CheckboxField label="Stay signed in to your Account"
-                ref={register(false)}
-                name="check"
-                onChange={handleChange}/>
+                value={state.check.value}
+                onChange={state.check.patchValue}/>
 
             <button type="submit" className="btn btn-primary w-100 mx-auto">Submit</button>
         </form>

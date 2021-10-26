@@ -1,13 +1,7 @@
 import React, { useEffect } from 'react'
 import { RadioFormControl } from '../../types'
 
-const RadioField = ({ items, label, name, value, onChange, registry }: RadioFormControl) => {
-    useEffect(() => {
-        if (registry) {
-            registry(name)
-        }
-    }, [])
-
+const RadioField = ({ items, label, name, value, onChange }: RadioFormControl) => {
     return (
         <div className="mb-4" >
             <label className="form-label" style={{ display: 'block' }}>{label}</label>
@@ -19,7 +13,7 @@ const RadioField = ({ items, label, name, value, onChange, registry }: RadioForm
                         id={item._id}
                         checked={value ? item._id === value : idx === 0}
                         value={item._id}
-                        onChange={(e) => onChange(e, item._id)}/>
+                        onChange={() => onChange(item._id)}/>
                     <label className="form-check-label" htmlFor={item._id}>{item.name}</label>
                 </div>
             ))}

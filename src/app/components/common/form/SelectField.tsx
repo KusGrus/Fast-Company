@@ -1,7 +1,7 @@
 import React, { BaseSyntheticEvent, ForwardedRef } from 'react'
 import { SelectFormControl } from '../../types'
 
-const SelectField = React.forwardRef(({ items, label, name, error, value, onChange }: SelectFormControl, ref:ForwardedRef<any>) => {
+const SelectField = ({ items, label, name, error, value, onChange }: SelectFormControl) => {
     const handleChange = (event: BaseSyntheticEvent) => {
         onChange(event, items.find(item => item._id === event.target.value))
     }
@@ -11,7 +11,6 @@ const SelectField = React.forwardRef(({ items, label, name, error, value, onChan
             <select className={error ? 'form-select is-invalid' : 'form-select'}
                 name={name}
                 id={name}
-                ref={ref}
                 value={value?._id}
                 onChange={handleChange}>
                 <option value="">Choose...</option>
@@ -20,6 +19,6 @@ const SelectField = React.forwardRef(({ items, label, name, error, value, onChan
             {error && <div className="invalid-feedback">{error}</div>}
         </div>
     )
-})
+}
 
 export default SelectField

@@ -47,7 +47,6 @@ const UserList = () => {
             </button>)
         }
     ])
-    const { register, change, state } = useForm()
     const [users, setUsers] = useState<UserDTO[]>([])
     const [professions, setProfessions] = useState<ProfessionDTO[]>([])
     const [paging, setPaging] = useState<Paging>({ count: 5, page: 1 })
@@ -57,7 +56,7 @@ const UserList = () => {
         .filter((user: { [key: string]: any }) =>
             Object.keys(filters).every(prop => user[prop]?._id === filters[prop]._id)
         )
-        .filter(item => item?.name?.toLowerCase()?.trim().includes((state.search?.value || '').toLowerCase().trim()))
+        // .filter(item => item?.name?.toLowerCase()?.trim().includes((state.search?.value || '').toLowerCase().trim()))
 
     useEffect(() => {
         api.users.fetchAll().then((data: any) => setUsers(data))
@@ -67,9 +66,9 @@ const UserList = () => {
         api.professions.fetchAll().then((data: any) => setProfessions(data))
     }, [])
 
-    useEffect(() => {
-        setFilters({})
-    }, [state.search?.value])
+    // useEffect(() => {
+    //     setFilters({})
+    // }, [state.search?.value])
 
 
     const handleDelete = (id: string) => setUsers(prevState => prevState.filter((user) => user._id !== id))
@@ -110,7 +109,7 @@ const UserList = () => {
     const handleReset = () => {
         setFilters({})
         setPaging({ count: 5, page: 1 })
-        state.search.patchValue('')
+        // state.search.patchValue('')
     }
 
     if (users.length) {
@@ -133,8 +132,7 @@ const UserList = () => {
                             <input type="text"
                                 className="form-control"
                                 name="search"
-                                placeholder="Search"
-                                ref={register(null) as any} onChange={change}/>
+                                placeholder="Search"/>
                         </div>
                         <Table items={filterUsers}
                             columns={columns}

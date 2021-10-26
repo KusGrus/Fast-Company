@@ -1,6 +1,5 @@
 import { TableItem } from './common/table/table-models'
 import { CommentDTO, ObjectDTO, QualityDTO, UserDTO } from '../../api/fake.api/api.model'
-import { UseFormChangeFn } from '../hooks/types'
 
 export const requiredText = 'This field is required'
 
@@ -52,11 +51,10 @@ export interface FiltersGroupProps {
 
 export interface FormControl {
     label?: string;
-    name: string;
+    name?: string;
     value?: any;
     error?: string;
-    onChange: UseFormChangeFn;
-    registry?: (name: string, value?: any) => void;
+    onChange: any;
 }
 
 export interface InputFormControl extends FormControl {

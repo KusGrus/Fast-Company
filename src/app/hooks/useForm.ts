@@ -1,157 +1,68 @@
 import { BaseSyntheticEvent, useState } from 'react'
-import {
-    Error,
-    FormControl,
-    UseForm,
-    UseFormChangeFn,
-    UseFormCheckValidityFn,
-    UseFormConfig,
-    UseFormGetFn,
-    UseFormRegisterFn,
-    UseFormSubmitFn,
-    ValidatorFn
-} from './types'
+import { Error, UseForm, UseFormConfig, UseFormInit, UseFormState, UseFormSubmitFn } from './types'
 
-const useForm = (config?: UseFormConfig): UseForm => {
-    const [formGroup, setFormGroup] = useState<{ [key: string]: FormControl }>({})
-    const [submitCount, setSubmitCount] = useState<number>(0)
-
-    const parseForm = () => {
-        return Object.keys(formGroup).reduce((acc, key) => ({ ...acc, [key]: formGroup[key].value }), {})
+const useForm = (form: UseFormInit, config?: UseFormConfig): UseForm => {
+    const pretty = (): {[key: string]: any} => {
+        return Object.keys(state).reduce((acc, key) => ({ ...acc, [key]: state[key].value }), {})
     }
 
-    const get: UseFormGetFn = (name: string) => {
-        return formGroup[name] || null
+    const _validateControl = (name: string, value: any): {valid: boolean, errors: Error[]} => {
+        const errors: Error[] = state[name].validators.map(fn => fn(value)).filter(Boolean) as Error[]
+        return {
+            errors,
+            valid: !errors.length
+        }
     }
 
-    const patchValue = (name: string) => {
-        return (value: any) => {
-            setFormGroup(prevState => {
-                if (prevState[name].nativeElement) {
-                    prevState[name].nativeElement!.value = value
-                }
+    const isValid = (): boolean => {
+        return Object.keys(state).every(key => state[key].valid)
+    }
+
+    const patchValue = (name: string, value: any) => {
+        if (state[name]) {
+            setState(prevState => {
+                const { valid = true, errors = [] } = _validateControl(name, value)
                 return {
                     ...prevState,
                     [name]: {
-                        ...prevState[name],
-                        value
+                        ...prevState[name], touched: true, valid, errors, value
                     }
                 }
             })
         }
     }
 
-    const register: UseFormRegisterFn = (defaultValue: any, validators: ValidatorFn[] = []) => {
-        return (element: HTMLInputElement | string) => {
-            if (element) {
-                if (typeof element === 'string') {
-                    if (!formGroup[element]) {
-                        setFormGroup(prevState => ({
-                            ...prevState,
-                            [element]: {
-                                value: defaultValue,
-                                patchValue: patchValue(element),
-                                validators: validators,
-                                errors: validateField({ validators }, defaultValue)
-                            }
-                        }))
-                    }
-                } else {
-                    if (element.getAttribute('type') === 'radio' && !element.checked) {
-                        return
-                    }
-                    let value: any
-                    const name = element.getAttribute('name') as string
-                    if (element.getAttribute('type') === 'checkbox') {
-                        value = defaultValue || element.checked
-                        element.checked = defaultValue || element.checked
-                    } else {
-                        value = defaultValue || element?.value
-                    }
-                    if (!formGroup[name] && element) {
-                        setFormGroup(prevState => ({
-                            ...prevState,
-                            [name]: {
-                                value: value,
-                                patchValue: patchValue(name),
-                                nativeElement: element,
-                                validators: validators,
-                                errors: validateField({ validators }, value)
-                            }
-                        }))
-                    }
-                }
-            }
-        }
+    const _namedPatchValue = (name: string) => {
+        return (value: any) => patchValue(name, value)
     }
 
-    const handleChange: UseFormChangeFn = (event: BaseSyntheticEvent | string, newValue?: any) => {
-        let value: any
-        let name: string
-        if (typeof event === 'string') {
-            name = event
-            value = newValue
-        } else {
-            name = event.target.getAttribute('name') as string
-            if (event.target.getAttribute('type') === 'checkbox') {
-                value = event.target.checked
-            } else {
-                value = newValue || event.target.value
+    const init = (data: UseFormInit): UseFormState => {
+        return Object.keys(data).reduce((acc, key) => ({
+            ...acc,
+            [key]: {
+                value: data[key][0],
+                validators: data[key][1] || [],
+                touched: false,
+                valid: true,
+                errors: [],
+                patchValue: _namedPatchValue(key)
             }
-        }
-        if (formGroup[name]) {
-            setFormGroup(prevState => ({
-                ...prevState,
-                [name]: {
-                    ...prevState[name],
-                    value,
-                    errors: validateField(prevState[name], value)
-                }
-            }))
-        }
+        }), {})
     }
 
-    const handleSubmit: UseFormSubmitFn = (fn: Function) => {
+    const [state, setState] = useState<UseFormState>(init(form))
+
+    const submit: UseFormSubmitFn = (fn: Function) => {
         return (event: BaseSyntheticEvent) => {
             event.preventDefault()
-            setSubmitCount(prevState => ++prevState)
-            if (config?.submitAnyway) {
-                fn(parseForm())
-            } else if (isValid()) {
-                fn(parseForm())
+            const prettyObject = pretty()
+            if (isValid()) {
+                fn(prettyObject)
             }
         }
     }
 
-    const validateField = (control: Pick<FormControl, 'validators'>, newValue: any): Error[] => {
-        const canValidate = config?.validateOnChange || submitCount || false
-        return canValidate
-            ? (control.validators?.map(fn => fn(newValue)) as Error[])?.filter(data => !!data)
-            : []
-    }
-
-    const checkValidity: UseFormCheckValidityFn = () => {
-        Object.keys(formGroup).forEach(key => {
-            formGroup[key].errors = formGroup[key]?.validators
-                ?.map(fn => fn(formGroup[key].value))
-                ?.filter(data => !!data) as Error[]
-        })
-    }
-
-    const isValid = () => {
-        checkValidity()
-        return !Object.keys(formGroup).some(key => formGroup[key]?.errors?.length)
-    }
-
-
-    return {
-        register,
-        get,
-        checkValidity,
-        change: handleChange,
-        submit: handleSubmit,
-        state: formGroup
-    }
+    return { submit, state }
 }
 
 export default useForm
