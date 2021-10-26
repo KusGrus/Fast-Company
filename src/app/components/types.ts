@@ -4,61 +4,60 @@ import { CommentDTO, ObjectDTO, QualityDTO, UserDTO } from '../../api/fake.api/a
 export const requiredText = 'This field is required'
 
 export interface BookmarkProps {
-    user: ItemForMark;
-    onMark: (item: ItemForMark) => any;
+    user: ItemForMark
+    onMark: (item: ItemForMark) => any
 }
 
 export interface CompanyStateProps {
-    total: number;
+    total: number
 }
 
 export interface QualitiesListProps {
-    qualities: QualityDTO[];
+    qualities: QualityDTO[]
 }
 
 export interface UserProfileProps {
-    user: UserDTO;
+    user: UserDTO
 }
 
 export interface UserEditProps {
-    user: UserDTO;
-    onUpdate: (data: any) => void;
+    user: UserDTO
+    onUpdate: (data: any) => void
 }
 
 
 export interface UserCardProps {
-    id: string;
+    id: string
 }
 
 export interface CommentFormProps {
-    users: UserDTO[];
-    onSend: (data: any) => void;
+    users: UserDTO[]
+    onSend: (data: any) => void
 }
 
 export interface CommentProps {
-    user: UserDTO | undefined;
-    comment: CommentDTO;
-    onDelete: (id: string)=>void
+    user: UserDTO | undefined
+    comment: CommentDTO
+    onDelete: (id: string) => void
 }
 
 export interface FiltersGroupProps {
-    code: string;
-    filters: ObjectDTO[] | { [key: string]: ObjectDTO };
-    selected: ObjectDTO;
-    onSelect: (code: string, item: ObjectDTO) => any;
+    code: string
+    filters: ObjectDTO[] | { [key: string]: ObjectDTO }
+    selected: ObjectDTO
+    onSelect: (code: string, item: ObjectDTO) => any
 }
 
-
 export interface FormControl {
-    label?: string;
-    name?: string;
-    value?: any;
-    error?: string;
-    onChange: any;
+    label?: string
+    value?: any
+    error?: string
+    name?: string
+    onChange: (value: any) => void
 }
 
 export interface InputFormControl extends FormControl {
-    type?: string;
+    type?: string
 }
 
 export interface TextAreaFormControl extends FormControl {
@@ -66,39 +65,39 @@ export interface TextAreaFormControl extends FormControl {
 }
 
 export interface SelectFormControl extends FormControl {
-    items: ObjectDTO[];
-    value?: ObjectDTO;
+    items: ObjectDTO[]
+    value?: ObjectDTO
 }
 
 export interface MultiSelectFormControl extends FormControl {
-    items: ObjectDTO[];
-    values?: any;
+    items: ObjectDTO[]
+    values?: any
 }
 
 export interface RadioFormControl extends FormControl {
-    items: ObjectDTO[];
-    value?: string;
+    items: ObjectDTO[]
+    value?: string
 }
 
 export interface CheckBoxFormControl extends FormControl {
-    value?: boolean;
+    value?: boolean
 }
 
 export interface ItemForMark extends TableItem {
-    bookmark?: boolean;
+    bookmark?: boolean
 }
 
 export interface FilterMap {
-    [key: string]: ObjectDTO;
+    [key: string]: ObjectDTO
 }
 
 export interface TableItemWithQuality extends TableItem {
-    qualities: QualityDTO[];
+    qualities: QualityDTO[]
 }
 
 export interface Gender {
-    name: string;
-    _id: string;
+    name: string
+    _id: string
 }
 
 export const genderOptions: Gender[] = [
