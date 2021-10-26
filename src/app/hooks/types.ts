@@ -28,6 +28,7 @@ export interface UseFormState {
 export interface UseForm {
     state: UseFormState
     submit: UseFormSubmitFn
+    reset: () => void
 }
 
 export interface UseFormConfig {

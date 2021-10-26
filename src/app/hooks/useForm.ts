@@ -4,11 +4,11 @@ import { Error, UseForm, UseFormConfig, UseFormInit, UseFormState, UseFormSubmit
 const useForm = (form: UseFormInit, config?: UseFormConfig): UseForm => {
     const canValidate = useRef<boolean>(!!config?.validateOnChange)
 
-    const pretty = (): {[key: string]: any} => {
+    const pretty = (): { [key: string]: any } => {
         return Object.keys(state).reduce((acc, key) => ({ ...acc, [key]: state[key].value }), {})
     }
 
-    const _validateControl = (name: string, value: any, validators?: ValidatorFn[]): {valid: boolean, errors: Error[]} => {
+    const _validateControl = (name: string, value: any, validators?: ValidatorFn[]): { valid: boolean, errors: Error[] } => {
         if (canValidate.current) {
             const validatorFns = validators || state[name].validators || []
             const errors: Error[] = validatorFns.map(fn => fn(value)).filter(Boolean) as Error[]
@@ -25,6 +25,17 @@ const useForm = (form: UseFormInit, config?: UseFormConfig): UseForm => {
             copy[key].valid = valid
             copy[key].errors = errors
         })
+        setState(copy)
+    }
+
+    const reset = (): void => {
+        const copy = { ...state }
+        Object.keys(copy).forEach(key => {
+            copy[key].value = null
+            copy[key].errors = []
+            copy[key].valid = true
+        })
+        canValidate.current = false
         setState(copy)
     }
 
@@ -76,7 +87,7 @@ const useForm = (form: UseFormInit, config?: UseFormConfig): UseForm => {
         }
     }
 
-    return { submit, state }
+    return { submit, state, reset }
 }
 
 export default useForm

@@ -2,6 +2,7 @@ import React, { BaseSyntheticEvent } from 'react'
 import { SelectFormControl } from '../../types'
 
 const SelectField = ({ items, label, name, error, value, onChange }: SelectFormControl) => {
+    const defValue = value?._id || ''
     const handleChange = (event: BaseSyntheticEvent) => onChange(items.find(item => item._id === event.target.value))
     return (
         <div className="mb-4">
@@ -9,7 +10,7 @@ const SelectField = ({ items, label, name, error, value, onChange }: SelectFormC
             <select className={error ? 'form-select is-invalid' : 'form-select'}
                 name={name}
                 id={name}
-                value={value?._id}
+                value={defValue}
                 onChange={handleChange}>
                 <option value="">Choose...</option>
                 {items.map(item => <option key={item._id} value={item._id}>{item.name}</option>)}

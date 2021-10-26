@@ -7,12 +7,16 @@ import SelectField from '../common/form/SelectField'
 import TextareaField from '../common/form/TextareaField'
 
 const CommentForm = ({ users, onSend }: CommentFormProps) => {
-    const { state, submit } = useForm({
+    const { state, submit, reset } = useForm({
         user: [null, [Validators.required({ message: requiredText })]],
         content: ['', [Validators.required({ message: requiredText })]]
     })
 
-    const onSubmit = (data: any) => onSend(data)
+    const onSubmit = (data: any) => {
+        console.log('submit')
+        onSend(data)
+        reset()
+    }
 
     return (
         <Card center={false}>
