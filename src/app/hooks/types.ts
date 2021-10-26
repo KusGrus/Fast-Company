@@ -32,5 +32,4 @@ export interface UseForm {
 
 export interface UseFormConfig {
     validateOnChange?: boolean
-    submitAnyway?: boolean
 }

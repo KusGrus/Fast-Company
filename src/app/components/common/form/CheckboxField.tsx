@@ -1,7 +1,7 @@
 import React, { BaseSyntheticEvent } from 'react'
 import { CheckBoxFormControl } from '../../types'
 
-const CheckboxField = ({ label, name, error, value = false, onChange }: CheckBoxFormControl) => {
+const CheckboxField = ({ label, error, name, value = false, onChange }: CheckBoxFormControl) => {
     const handleCheck = (event: BaseSyntheticEvent) => onChange(event.target.checked)
     return (
         <div className="mb-4">

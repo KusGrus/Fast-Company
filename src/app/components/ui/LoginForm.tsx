@@ -6,9 +6,7 @@ import CheckboxField from '../common/form/CheckboxField'
 import { requiredText } from '../types'
 
 const LoginForm = () => {
-    const {
-        state, submit
-    } = useForm({
+    const { state, submit } = useForm({
         email: ['', [
             Validators.required({ message: requiredText }),
             Validators.email({ message: 'Incorrect e-mail!' })
@@ -17,7 +15,7 @@ const LoginForm = () => {
             Validators.required({ message: requiredText }),
             Validators.min(8, { message: 'Minimum of 8 characters!' })
         ]],
-        check: [true]
+        check: [false]
     })
 
     const onSubmit = (data: any) => console.log(data)

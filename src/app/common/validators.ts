@@ -37,7 +37,9 @@ function email(config?: ValidatorConfig): ValidatorFn {
 function required(config?: ValidatorConfig): ValidatorFn {
     return (value: any) => {
         let valid
-        if (Array.isArray(value)) {
+        if (value === null || value === undefined) {
+            valid = false
+        } else if (Array.isArray(value)) {
             valid = value.length
         } else if (typeof value === 'number' || typeof value === 'string' || typeof value === 'boolean') {
             valid = !!value

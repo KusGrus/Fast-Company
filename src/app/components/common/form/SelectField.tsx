@@ -1,10 +1,8 @@
-import React, { BaseSyntheticEvent, ForwardedRef } from 'react'
+import React, { BaseSyntheticEvent } from 'react'
 import { SelectFormControl } from '../../types'
 
 const SelectField = ({ items, label, name, error, value, onChange }: SelectFormControl) => {
-    const handleChange = (event: BaseSyntheticEvent) => {
-        onChange(event, items.find(item => item._id === event.target.value))
-    }
+    const handleChange = (event: BaseSyntheticEvent) => onChange(items.find(item => item._id === event.target.value))
     return (
         <div className="mb-4">
             <label htmlFor={name} className="form-label">{label}</label>

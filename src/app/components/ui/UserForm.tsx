@@ -15,6 +15,17 @@ const UserForm = ({ user, onUpdate }: UserEditProps) => {
     const [professions, setProfessions] = useState<ProfessionDTO[]>([])
     const [qualities, setQualities] = useState<ObjectDTO[]>([])
 
+    const { state, submit } = useForm({
+        name: [user.name, [Validators.required({ message: requiredText })]],
+        email: [user.email, [
+            Validators.required({ message: requiredText }),
+            Validators.email({ message: 'Incorrect e-mail!' })
+        ]],
+        profession: [user.profession, [Validators.required({ message: requiredText })]],
+        sex: [user.sex],
+        qualities: [user.qualities]
+    })
+
     useEffect(() => {
         api.professions.fetchAll().then((p: any) => setProfessions(p))
         api.qualities.fetchAll().then((q: any) => setQualities(utils.convertQualities(q)))
@@ -23,7 +34,38 @@ const UserForm = ({ user, onUpdate }: UserEditProps) => {
     const onSubmit = (data: any) => onUpdate(data)
 
     return (
-        <h1>12</h1>
+        <Form title="Edit user">
+            <form onSubmit={submit(onSubmit)}>
+                <InputField label="Name"
+                    error={state.name.errors[0]?.message}
+                    value={state.name.value}
+                    onChange={state.name.patchValue}/>
+
+                <InputField label="Email"
+                    error={state.email.errors[0]?.message}
+                    value={state.email.value}
+                    onChange={state.email.patchValue}/>
+
+                <SelectField label="Profession"
+                    items={professions}
+                    value={state.profession.value}
+                    error={state.profession.errors[0]?.message}
+                    onChange={state.profession.patchValue}/>
+
+                <RadioField label="Gender"
+                    items={genderOptions}
+                    name="sex"
+                    value={state.sex.value}
+                    onChange={state.sex.patchValue}/>
+
+                <MultiSelectField items={qualities}
+                    label="Qualities"
+                    values={state.qualities.value}
+                    onChange={state.qualities.patchValue}/>
+
+                <button type="submit" className="btn btn-primary w-100 mx-auto">Update</button>
+            </form>
+        </Form>
     )
 }
 

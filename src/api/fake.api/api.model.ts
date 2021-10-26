@@ -19,31 +19,31 @@ export type ProfessionMap<T> = Record<Professions, T>
 export type QualitiesMap<T> = Record<Qualities, T>
 
 export interface ObjectDTO {
-    _id: string;
-    name: string;
+    _id: string
+    name: string
 }
 
 export interface ProfessionDTO extends ObjectDTO {
 }
 
 export interface QualityDTO extends ObjectDTO {
-    color: string;
+    color: string
 }
 
 export interface UserDTO extends ObjectDTO {
-    email: string;
-    sex: 'male' | 'female' | 'other';
-    profession: ProfessionDTO;
-    qualities: QualityDTO[];
-    completedMeetings: number;
-    rate: number;
-    bookmark: boolean;
+    email: string
+    sex: 'male' | 'female' | 'other'
+    profession: ProfessionDTO
+    qualities: QualityDTO[]
+    completedMeetings: number
+    rate: number
+    bookmark: boolean
 }
 
 export interface CommentDTO {
-    _id: string;
-    userId: string;
-    pageId: string;
-    content: string;
-    createdAt: string;
+    _id: string
+    userId: string
+    pageId: string
+    content: string
+    createdAt: string
 }
