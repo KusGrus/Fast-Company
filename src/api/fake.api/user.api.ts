@@ -1,122 +1,168 @@
-import {ProfessionMap, ProfessionDTO, QualitiesMap, QualityDTO, UserDTO} from './user.api.model'
-
-const professions: ProfessionMap<ProfessionDTO> = {
-    doctor: {_id: "67rdca3eeb7f6fgeed471818", name: "Доктор"},
-    waiter: {_id: "67rdca3eeb7f6fgeed471820", name: "Официант"},
-    physics: {_id: "67rdca3eeb7f6fgeed471814", name: "Физик"},
-    engineer: {_id: "67rdca3eeb7f6fgeed471822", name: "Инженер"},
-    actor: {_id: "67rdca3eeb7f6fgeed471824", name: "Актер"},
-    cook: {_id: "67rdca3eeb7f6fgeed471829", name: "Повар"}
-}
-const qualities: QualitiesMap<QualityDTO> = {
-    tedious: {_id: "67rdca3eeb7f6fgeed471198", name: "Нудила", color: "primary"},
-    strange: {_id: "67rdca3eeb7f6fgeed471100", name: "Странный", color: "secondary"},
-    buller: {_id: "67rdca3eeb7f6fgeed4711012", name: "Троль", color: "success"},
-    alcoholic: {_id: "67rdca3eeb7f6fgeed471101", name: "Алкоголик", color: "danger"},
-    handsome: {_id: "67rdca3eeb7f6fgeed471102", name: "Красавчик", color: "info"},
-    uncertain: {_id: "67rdca3eeb7f6fgeed471102", name: "Неуверенный", color: "dark"},
-
-}
+import { UserDTO } from './api.model'
+import { professionsObject as professions } from './professions.api'
+import { qualities } from './qualities.api'
 
 const users: UserDTO[] = [
     {
-        _id: "67rdca3eeb7f6fgeed471815",
-        name: "Джон Дориан",
+        _id: '67rdca3eeb7f6fgeed471815',
+        name: 'Джон Дориан',
+        email: 'johndorian@fastcompany.ru',
+        sex: 'male',
         profession: professions.doctor,
         qualities: [qualities.tedious, qualities.uncertain, qualities.strange],
         completedMeetings: 36,
-        rate: 2.5
+        rate: 2.5,
+        bookmark: false
     },
     {
-        _id: "67rdca3eeb7f6fgeed471816",
-        name: "Кокс",
+        _id: '67rdca3eeb7f6fgeed471816',
+        name: 'Кокс',
+        email: 'koks@fastcompany.ru',
+        sex: 'male',
         profession: professions.doctor,
         qualities: [qualities.buller, qualities.handsome, qualities.alcoholic],
         completedMeetings: 15,
-        rate: 2.5
+        rate: 2.5,
+        bookmark: false
     },
     {
-        _id: "67rdca3eeb7f6fgeed471817",
-        name: "Боб Келсо",
+        _id: '67rdca3eeb7f6fgeed471817',
+        name: 'Боб Келсо',
+        email: 'bobkelso@fastcompany.ru',
+        sex: 'male',
         profession: professions.doctor,
         qualities: [qualities.buller],
         completedMeetings: 247,
-        rate: 3.5
+        rate: 3.5,
+        bookmark: false
     },
     {
-        _id: "67rdca3eeb7f6fgeed471818",
-        name: "Рэйчел Грин",
+        _id: '67rdca3eeb7f6fgeed471818',
+        name: 'Рэйчел Грин',
+        email: 'rachelgreene@fastcompany.ru',
+        sex: 'female',
         profession: professions.waiter,
         qualities: [qualities.uncertain],
         completedMeetings: 148,
-        rate: 3.5
+        rate: 3.5,
+        bookmark: false
     },
     {
-        _id: "67rdca3eeb7f6fgeed471819",
-        name: "Шелдон Купер",
+        _id: '67rdca3eeb7f6fgeed471819',
+        name: 'Шелдон Купер',
+        email: 'sheldoncooper@fastcompany.ru',
+        sex: 'male',
         profession: professions.physics,
         qualities: [qualities.strange, qualities.tedious],
         completedMeetings: 37,
-        rate: 4.6
+        rate: 4.6,
+        bookmark: false
     },
     {
-        _id: "67rdca3eeb7f6fgeed471820",
-        name: "Леонард Хофстедтер",
+        _id: '67rdca3eeb7f6fgeed471820',
+        name: 'Леонард Хофстедтер',
+        email: 'leonardhofstedter@fastcompany.ru',
+        sex: 'male',
         profession: professions.physics,
         qualities: [qualities.strange, qualities.uncertain],
         completedMeetings: 147,
-        rate: 3.5
+        rate: 3.5,
+        bookmark: false
     },
     {
-        _id: "67rdca3eeb7f6fgeed471821",
-        name: "Говард Воловиц",
+        _id: '67rdca3eeb7f6fgeed471821',
+        name: 'Говард Воловиц',
+        email: 'howardwolowitz@fastcompany.ru',
+        sex: 'male',
         profession: professions.engineer,
         qualities: [qualities.strange, qualities.tedious],
         completedMeetings: 72,
-        rate: 3.5
+        rate: 3.5,
+        bookmark: false
     },
     {
-        _id: "67rdca3eeb7f6fgeed471822",
-        name: "Никола Тесла",
+        _id: '67rdca3eeb7f6fgeed471822',
+        name: 'Никола Тесла',
+        email: 'nikolatesla@fastcompany.ru',
+        sex: 'male',
         profession: professions.engineer,
         qualities: [qualities.handsome],
         completedMeetings: 72,
-        rate: 5
+        rate: 5,
+        bookmark: false
     },
     {
-        _id: "67rdca3eeb7f6fgeed471823",
-        name: "Моника Геллер",
+        _id: '67rdca3eeb7f6fgeed471823',
+        name: 'Моника Геллер',
+        email: 'monicageller@fastcompany.ru',
+        sex: 'female',
         profession: professions.cook,
         qualities: [qualities.strange, qualities.uncertain],
         completedMeetings: 17,
-        rate: 4.5
+        rate: 4.5,
+        bookmark: false
     },
     {
-        _id: "67rdca3eeb7f6fgeed471824",
-        name: "Рататуй",
+        _id: '67rdca3eeb7f6fgeed471824',
+        name: 'Рататуй',
+        email: 'ratatouille@fastcompany.ru',
+        sex: 'male',
         profession: professions.cook,
         qualities: [qualities.handsome, qualities.buller],
         completedMeetings: 17,
-        rate: 4.5
+        rate: 4.5,
+        bookmark: false
     },
     {
-        _id: "67rdca3eeb7f6fgeed47181f",
-        name: "Джоуи Триббиани",
+        _id: '67rdca3eeb7f6fgeed47181f',
+        name: 'Джоуи Триббиани',
+        email: 'joeytribbiani@fastcompany.ru',
+        sex: 'male',
         profession: professions.actor,
         qualities: [qualities.uncertain, qualities.strange],
         completedMeetings: 434,
-        rate: 3.5
+        rate: 3.5,
+        bookmark: false
     },
     {
-        _id: "67rdca3eeb7f6fgeed47181r",
-        name: "Брэд Питт",
+        _id: '67rdca3eeb7f6fgeed47181r',
+        name: 'Брэд Питт',
+        email: 'bradpitt@fastcompany.ru',
+        sex: 'male',
         profession: professions.actor,
         qualities: [qualities.handsome],
         completedMeetings: 434,
-        rate: 5
-    },
+        rate: 5,
+        bookmark: false
+    }
 ]
 
-export function fetchAll(): UserDTO[] {
-    return users
+if (!localStorage.getItem('users')) {
+    localStorage.setItem('users', JSON.stringify(users))
+}
+
+const fetchAll = () => new Promise((resolve) => {
+    window.setTimeout(() => resolve(JSON.parse(<string>localStorage.getItem('users'))), 2000)
+})
+
+const update = (id: string, data: UserDTO) => new Promise((resolve) => {
+    const users = JSON.parse(<string>localStorage.getItem('users'))
+    const userIndex = users.findIndex((u: UserDTO) => u._id === id)
+    users[userIndex] = { ...users[userIndex], ...data }
+    localStorage.setItem('users', JSON.stringify(users))
+    resolve(users[userIndex])
+})
+
+
+const getById = (id: string) => new Promise((resolve) => {
+    window.setTimeout(() => {
+        resolve(JSON.parse(<string>localStorage.getItem('users')).find((user: UserDTO) => user._id === id))
+    }, 1000)
+})
+
+
+export default {
+    fetchAll,
+    getById,
+    update
 }
