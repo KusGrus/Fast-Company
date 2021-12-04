@@ -1,5 +1,5 @@
 import { TableItem } from './common/table/table-models'
-import { CommentDTO, ObjectDTO, QualityDTO, UserDTO } from '../../api/fake.api/api.model'
+import { CommentDTO, ObjectDTO, UserDTO } from '../../api/fake.api/api.model'
 
 export const requiredText = 'This field is required'
 
@@ -13,7 +13,7 @@ export interface CompanyStateProps {
 }
 
 export interface QualitiesListProps {
-    qualities: QualityDTO[]
+    qualities: string[]
 }
 
 export interface UserProfileProps {
@@ -25,6 +25,9 @@ export interface UserEditProps {
     onUpdate: (data: any) => void
 }
 
+export interface ProfessionProps {
+    id: string
+}
 
 export interface UserCardProps {
     id: string
@@ -92,7 +95,7 @@ export interface FilterMap {
 }
 
 export interface TableItemWithQuality extends TableItem {
-    qualities: QualityDTO[]
+    qualities: string[]
 }
 
 export interface Gender {

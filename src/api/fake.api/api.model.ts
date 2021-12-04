@@ -24,6 +24,8 @@ export interface ObjectDTO {
 }
 
 export interface ProfessionDTO extends ObjectDTO {
+    updatedAt?: string
+    createdAt?: string
 }
 
 export interface QualityDTO extends ObjectDTO {

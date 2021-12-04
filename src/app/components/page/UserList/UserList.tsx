@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Bookmark from '../../common/Bookmark'
 import Table from '../../common/table'
 import CompanyState from '../../common/CompanyState'
 import FiltersGroup from '../../common/FiltersGroup'
 import QualitiesList from '../../common/QualitiesList'
-import api from '../../../../api'
-import { ObjectDTO, ProfessionDTO, UserDTO } from '../../../../api/fake.api/api.model'
+import { ObjectDTO } from '../../../../api/fake.api/api.model'
 import { Column, Paging, TableItem } from '../../common/table/table-models'
 import { FilterMap, ItemForMark, TableItemWithQuality } from '../../types'
 import Loader from '../../common/loader/Loader'
 import { Link } from 'react-router-dom'
-import useForm from '../../../hooks/useForm'
+import { useUser } from '../../../hooks/useUser'
+import { useProfession } from '../../../hooks/useProfession'
+import Profession from '../../ui/Profession'
 
 
 const UserList = () => {
@@ -26,7 +27,7 @@ const UserList = () => {
             title: 'Качества',
             componentFn: (item: TableItemWithQuality) => (<QualitiesList qualities={item.qualities}/>)
         },
-        { code: 'profession', title: 'Профессия', path: 'profession.name', sort: 'default' },
+        { code: 'profession', title: 'Профессия', sort: 'default', componentFn: (item: TableItem) => (<Profession id={item.profession}/>) },
         { code: 'completedMeetings', title: 'Встретился (раз)', path: 'completedMeetings', sort: 'default' },
         {
             code: 'bookmark',
@@ -47,8 +48,8 @@ const UserList = () => {
             </button>)
         }
     ])
-    const [users, setUsers] = useState<UserDTO[]>([])
-    const [professions, setProfessions] = useState<ProfessionDTO[]>([])
+    const { users } = useUser()
+    const { professions } = useProfession()
     const [paging, setPaging] = useState<Paging>({ count: 5, page: 1 })
     const [filters, setFilters] = useState<FilterMap>({})
 
@@ -56,36 +57,11 @@ const UserList = () => {
         .filter((user: { [key: string]: any }) =>
             Object.keys(filters).every(prop => user[prop]?._id === filters[prop]._id)
         )
-        // .filter(item => item?.name?.toLowerCase()?.trim().includes((state.search?.value || '').toLowerCase().trim()))
 
-    useEffect(() => {
-        api.users.fetchAll().then((data: any) => setUsers(data))
-    }, [])
+    const handleDelete = (id: string) => console.log('delete')
 
-    useEffect(() => {
-        api.professions.fetchAll().then((data: any) => setProfessions(data))
-    }, [])
+    const handleMark = (user: ItemForMark) => console.log('mark')
 
-    // useEffect(() => {
-    //     setFilters({})
-    // }, [state.search?.value])
-
-
-    const handleDelete = (id: string) => setUsers(prevState => prevState.filter((user) => user._id !== id))
-    const handleMark = (user: ItemForMark) => setUsers(prevState => {
-        const tempUser: UserDTO = { ...user as UserDTO, bookmark: !user.bookmark }
-        const idx = prevState.findIndex(state => state._id === user._id)
-        if (idx >= 0) {
-            return prevState.map(u => {
-                if (u._id === user._id) {
-                    return tempUser
-                } else {
-                    return u
-                }
-            })
-        }
-        return prevState
-    })
     const pagingController = () => ({
         first: () => setPaging((prevState) => ({ count: prevState.count, page: 1 })),
         change: (page: number) => setPaging((prevState) => ({ count: prevState.count, page })),
@@ -109,7 +85,6 @@ const UserList = () => {
     const handleReset = () => {
         setFilters({})
         setPaging({ count: 5, page: 1 })
-        // state.search.patchValue('')
     }
 
     if (users.length) {
