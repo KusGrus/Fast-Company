@@ -4,8 +4,11 @@ import InputField from '../common/form/InputField'
 import Validators from '../../common/validators'
 import CheckboxField from '../common/form/CheckboxField'
 import { requiredText } from '../types'
+import { useAuth } from '../../hooks/useAuth'
+import { SignInData } from '../../hooks/types'
 
 const LoginForm = () => {
+    const { signIn } = useAuth()
     const { state, submit } = useForm({
         email: ['', [
             Validators.required({ message: requiredText }),
@@ -18,7 +21,13 @@ const LoginForm = () => {
         check: [false]
     })
 
-    const onSubmit = (data: any) => console.log(data)
+    const onSubmit = async (data: SignInData) => {
+        try {
+            await signIn(data)
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <form onSubmit={submit(onSubmit)}>

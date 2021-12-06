@@ -98,13 +98,18 @@ export interface TableItemWithQuality extends TableItem {
     qualities: string[]
 }
 
-export interface Gender {
-    name: string
-    _id: string
-}
 
-export const genderOptions: Gender[] = [
+export const genderOptions: ObjectDTO[] = [
     { name: 'Male', _id: 'male' },
     { name: 'Female', _id: 'female' },
     { name: 'Other', _id: 'other' }
 ]
+
+export interface LoginFormData {
+    email: string
+    password: string
+    licence: boolean
+    profession: ObjectDTO
+    qualities: ObjectDTO[]
+    sex: string;
+}

@@ -9,11 +9,16 @@ import SelectField from '../common/form/SelectField'
 import RadioField from '../common/form/RadioField'
 import MultiSelectField from '../common/form/MultiSelectField'
 import CheckboxField from '../common/form/CheckboxField'
-import { genderOptions, requiredText } from '../types'
+import { genderOptions, LoginFormData, requiredText } from '../types'
+import { useAuth } from '../../hooks/useAuth'
+import { SignUpData } from '../../hooks/types'
+import { useHistory } from 'react-router-dom'
 
 const RegisterForm = () => {
+    const history = useHistory()
     const [professions, setProfessions] = useState<ProfessionDTO[]>([])
     const [qualities, setQualities] = useState<ObjectDTO[]>([])
+    const { signUp } = useAuth()
 
     const { state, submit } = useForm({
         email: ['', [
@@ -25,7 +30,7 @@ const RegisterForm = () => {
             Validators.min(8, { message: 'Minimum of 8 characters!' })
         ]],
         profession: ['', [Validators.required({ message: requiredText })]],
-        sex: [null],
+        sex: ['male'],
         qualities: [null],
         licence: [false, [Validators.required({ message: requiredText })]]
     })
@@ -35,7 +40,19 @@ const RegisterForm = () => {
         api.qualities.fetchAll().then((q: any) => setQualities(utils.convertQualities(q)))
     }, [])
 
-    const onSubmit = (data: any) => console.log(data)
+    const onSubmit = async (data: LoginFormData) => {
+        const formData: SignUpData = {
+            ...data,
+            profession: data.profession._id,
+            qualities: data.qualities.map(q => q._id)
+        }
+        try {
+            await signUp(formData)
+            history.push('/')
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <form onSubmit={submit(onSubmit)}>

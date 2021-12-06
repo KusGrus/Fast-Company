@@ -5,22 +5,26 @@ import Main from './layouts/Main'
 import Login from './layouts/Login'
 import Users from './layouts/Users'
 import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import ProfessionProvider from './hooks/useProfession'
 import QualityProvider from './hooks/useQuality'
+import AuthProvider from './hooks/useAuth'
 
 
 const App = () => {
     return (
         <React.Fragment>
-            <NavBar/>
-            <Route path="/" component={Main} exact/>
-            <ProfessionProvider>
-                <QualityProvider>
-                    <Route path="/login/:type?" component={Login}/>
-                    <Route path="/users/:id?" component={Users}/>
-                </QualityProvider>
-            </ProfessionProvider>
-            <ToastContainer/>
+            <AuthProvider>
+                <NavBar/>
+                <Route path="/" component={Main} exact/>
+                <ProfessionProvider>
+                    <QualityProvider>
+                        <Route path="/login/:type?" component={Login}/>
+                        <Route path="/users/:id?" component={Users}/>
+                    </QualityProvider>
+                </ProfessionProvider>
+            </AuthProvider>
+            <ToastContainer />
         </React.Fragment>
     )
 }
