@@ -39,6 +39,7 @@ export interface UserDTO extends ObjectDTO {
     qualities: QualityDTO[]
     completedMeetings: number
     rate: number
+    imageSrc?: string
     bookmark: boolean
 }
 

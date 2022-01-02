@@ -1,5 +1,5 @@
 import { ProfessionDTO, QualityDTO, UserDTO } from '../../api/fake.api/api.model'
-import { SignUpData } from '../hooks/types'
+import { CommentDTO, IUser } from '../hooks/types'
 
 export interface ApiResponse<T> {
     data: ApiDTO<T>
@@ -13,8 +13,9 @@ export interface ApiDTO<T> {
 
 export const enum LocalStorageKeys {
     TOKEN = 'jwt-token',
+    LOCAL_ID = 'user-local-id',
     REFRESH_TOKEN = 'jwt-refresh-token',
-    TOKEN_EXPIRES = 'jwt-refresh-expires'
+    TOKEN_EXPIRES = 'jwt-expires'
 }
 
 export type HttpActions = 'get' | 'post' | 'delete' | 'put'
@@ -24,9 +25,10 @@ export type HttpService<T> = {
 }
 
 export interface UserService {
-    get: () => Promise<ApiDTO<UserDTO[]>>
-    create: (args: SignUpData) => Promise<ApiDTO<SignUpData>>
-    getById: (id: string) => Promise<ApiDTO<SignUpData>>
+    get: () => Promise<ApiDTO<IUser[]>>
+    create: (args: IUser) => Promise<ApiDTO<IUser>>
+    getById: (id: string) => Promise<ApiDTO<IUser>>
+    edit: (id: string, payload: IUser) => Promise<ApiDTO<IUser>>
 }
 
 export interface ProfessionService {
@@ -35,4 +37,10 @@ export interface ProfessionService {
 
 export interface QualityService {
     get: () => Promise<ApiDTO<QualityDTO[]>>
+}
+
+export interface CommentService {
+    add: (comment: CommentDTO) => Promise<ApiDTO<CommentDTO>>
+    get: (pageId: string) => Promise<ApiDTO<CommentDTO[]>>
+    delete: (id: string) => Promise<ApiDTO<CommentDTO>>
 }

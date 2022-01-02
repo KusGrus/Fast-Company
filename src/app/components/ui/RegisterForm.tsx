@@ -11,7 +11,7 @@ import MultiSelectField from '../common/form/MultiSelectField'
 import CheckboxField from '../common/form/CheckboxField'
 import { genderOptions, LoginFormData, requiredText } from '../types'
 import { useAuth } from '../../hooks/useAuth'
-import { SignUpData } from '../../hooks/types'
+import { IUser } from '../../hooks/types'
 import { useHistory } from 'react-router-dom'
 
 const RegisterForm = () => {
@@ -21,6 +21,10 @@ const RegisterForm = () => {
     const { signUp } = useAuth()
 
     const { state, submit } = useForm({
+        name: ['', [
+            Validators.required({ message: requiredText }),
+            Validators.min(3, { message: 'Minimum of 8 characters!' })
+        ]],
         email: ['', [
             Validators.required({ message: requiredText }),
             Validators.email({ message: 'Incorrect e-mail!' })
@@ -41,7 +45,7 @@ const RegisterForm = () => {
     }, [])
 
     const onSubmit = async (data: LoginFormData) => {
-        const formData: SignUpData = {
+        const formData: IUser = {
             ...data,
             profession: data.profession._id,
             qualities: data.qualities.map(q => q._id)
@@ -60,6 +64,11 @@ const RegisterForm = () => {
                 error={state.email.errors[0]?.message}
                 value={state.email?.value}
                 onChange={state.email.patchValue}/>
+
+            <InputField label="Name"
+                error={state.name.errors[0]?.message}
+                value={state.name?.value}
+                onChange={state.name.patchValue}/>
 
             <InputField label="Password"
                 type="password"

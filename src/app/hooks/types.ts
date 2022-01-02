@@ -1,9 +1,10 @@
 import { BaseSyntheticEvent } from 'react'
-import { ProfessionDTO, QualityDTO, UserDTO } from '../../api/fake.api/api.model'
+import { ProfessionDTO, QualityDTO } from '../../api/fake.api/api.model'
 
 export type ValidatorFn = (value: any) => Error | null
 export type UseFormSubmitFn = (fn: Function) => (event: BaseSyntheticEvent) => void
 export type UseFormSetErrorFn = (name: string, error: Error) => void
+export type UseFormPatchValueFn = (data: {[key: string]: any}) => void
 
 export const enum AuthErrorMap {
     EMAIL_EXISTS = 'EMAIL_EXISTS',
@@ -37,6 +38,7 @@ export interface UseForm {
     state: UseFormState
     submit: UseFormSubmitFn
     setError: UseFormSetErrorFn
+    patchValue: UseFormPatchValueFn
     reset: () => void
 }
 
@@ -45,13 +47,31 @@ export interface UseFormConfig {
 }
 
 export interface UseUserContext {
-    users: UserDTO[]
+    getUserById: (id: string) => IUser | undefined
+    users: IUser[]
 }
 
 export interface UseProfessionContext {
     professions: ProfessionDTO[]
     isLoading: boolean
     getProfessionById: (id: string) => ProfessionDTO | undefined
+}
+
+export interface UseCommentsContext {
+    comments: CommentDTO[],
+    createComment: (data: CommentFormData) => Promise<void>
+    deleteComments: (id: string) => Promise<void>
+}
+
+export interface CommentFormData {
+    content: string
+}
+
+export interface CommentDTO extends CommentFormData {
+    _id: string
+    pageId: string
+    userId: string
+    createdAt: number
 }
 
 export interface UseQualityContext {
@@ -61,9 +81,11 @@ export interface UseQualityContext {
 }
 
 export interface UseAuthContext {
-    signUp: (signUpData: SignUpData) => Promise<void>
+    signUp: (signUpData: IUser) => Promise<void>
     signIn: (signUpData: SignInData) => Promise<void>
-    user: SignUpData | undefined
+    logout: () => void
+    edit: (id: string, payload: IUser) => Promise<void>
+    user: IUser | null
 }
 
 export interface SignInData {
@@ -71,16 +93,20 @@ export interface SignInData {
     password?: string
 }
 
-export interface SignUpData extends SignInData {
+export interface IUser extends SignInData {
     _id?: string
-    licence: boolean
+    licence?: boolean
+    name: string
     profession: string
     qualities: string[]
+    completedMeetings?: number
+    rate?: number
+    imageSrc?: string
     sex: string;
 }
 
 export interface FirebaseAuthResponse {
-    email: string
+    email?: string
     refreshToken: string
     idToken: string
     expiresIn: number

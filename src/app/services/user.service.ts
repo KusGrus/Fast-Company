@@ -1,6 +1,6 @@
 import httpService from './http.service'
 import { UserService } from './types'
-import { SignUpData } from '../hooks/types'
+import { IUser } from '../hooks/types'
 
 const apiEndPoint = 'user/'
 
@@ -9,12 +9,16 @@ const userService: UserService = {
         const { data } = await httpService.get(apiEndPoint)
         return data
     },
-    create: async (payload: SignUpData) => {
+    create: async (payload: IUser) => {
         const { data } = await httpService.put(apiEndPoint + payload._id, payload)
         return data
     },
     getById: async (id: string) => {
         const { data } = await httpService.get(apiEndPoint + id)
+        return data
+    },
+    edit: async(id: string, payload: IUser) => {
+        const { data } = await httpService.put(apiEndPoint + id, payload)
         return data
     }
 }

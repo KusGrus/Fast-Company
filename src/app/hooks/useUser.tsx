@@ -1,9 +1,8 @@
 import React, { PropsWithChildren, useContext, useEffect, useState } from 'react'
-import { UseUserContext } from './types'
+import { IUser, UseUserContext } from './types'
 import userService from '../services/user.service'
 import { toast } from 'react-toastify'
 import Loader from '../components/common/loader/Loader'
-import { UserDTO } from '../../api/fake.api/api.model'
 
 
 const UserContext = React.createContext<UseUserContext | null>(null)
@@ -13,7 +12,7 @@ export const useUser = (): UseUserContext => {
 }
 
 const UserProvider = ({ children }: PropsWithChildren<any>) => {
-    const [users, setUsers] = useState<UserDTO[]>([])
+    const [users, setUsers] = useState<IUser[]>([])
     const [isLoading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
 
@@ -33,6 +32,10 @@ const UserProvider = ({ children }: PropsWithChildren<any>) => {
         }
     }
 
+    const getUserById = (id: string) => {
+        return users.find(u => u._id === id)
+    }
+
     useEffect(() => {
         getUsers().then()
     }, [])
@@ -46,7 +49,7 @@ const UserProvider = ({ children }: PropsWithChildren<any>) => {
 
 
     return (
-        <UserContext.Provider value={{ users }}>
+        <UserContext.Provider value={{ users, getUserById }}>
             {isLoading ? <Loader/> : children}
         </UserContext.Provider>
     )

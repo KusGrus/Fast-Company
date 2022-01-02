@@ -73,8 +73,22 @@ function timeLeft(date: string | number): string {
     }
 }
 
+function random(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min) + min)
+}
+
+function generateAvatar(): string {
+    return `https://avatars.dicebear.com/api/avataaars/${(
+        Math.random() + 1
+    )
+        .toString(36)
+        .substring(7)}.svg`
+}
+
 export default {
     declOfNum,
     convertQualities,
-    timeLeft
+    timeLeft,
+    random,
+    generateAvatar
 }

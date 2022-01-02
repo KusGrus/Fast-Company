@@ -4,15 +4,23 @@ import {
     FirebaseAuthErrors,
     FirebaseAuthResponse,
     SignInData,
-    SignUpData,
+    IUser,
     UseAuthContext
 } from './types'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import userService from '../services/user.service'
 import localStorageService from '../services/localStorage.service'
+import utils from '../common/utils'
+import Loader from '../components/common/loader/Loader'
+import { useHistory } from 'react-router-dom'
 
-const httpAuth = axios.create()
+export const httpAuth = axios.create({
+    baseURL: 'https://identitytoolkit.googleapis.com/v1/',
+    params: {
+        key: process.env.REACT_APP_FIREBASE_API_KEY
+    }
+})
 
 const AuthContext = React.createContext<UseAuthContext | null>(null)
 
@@ -21,8 +29,10 @@ export const useAuth = (): UseAuthContext => {
 }
 
 const AuthProvider = ({ children }: PropsWithChildren<any>) => {
-    const [currentUser, setCurrentUser] = useState<SignUpData>()
+    const [currentUser, setCurrentUser] = useState<IUser | null>(null)
     const [error, setError] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const history = useHistory()
 
     useEffect(() => {
         if (error) {
@@ -30,6 +40,10 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
             setError(null)
         }
     }, [error])
+
+    useEffect(() => {
+        preloadUser().then()
+    }, [])
 
     const errorCatcher = (e: { response: { data: { message: any } } }) => {
         const { message } = e.response.data
@@ -45,7 +59,7 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
         throw (error)
     }
 
-    const createUser = async (data: SignUpData) => {
+    const createUser = async (data: IUser) => {
         try {
             const { content } = await userService.create(data)
             setCurrentUser(content)
@@ -60,24 +74,47 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
             setCurrentUser(content)
         } catch (e) {
             errorCatcher(e)
+        } finally {
+            setIsLoading(false)
         }
     }
 
-    const signUp = async ({ email, password, ...rest }: SignUpData) => {
-        const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_API_KEY}`
+    const preloadUser = async () => {
+        if (localStorageService.getAccessToken()) {
+            await getUser(localStorageService.getLocalId() as string)
+        } else {
+            setIsLoading(false)
+        }
+    }
+
+    const signUp = async ({ email, password, ...rest }: IUser) => {
         try {
-            const { data }: {data: FirebaseAuthResponse} = await httpAuth.post(url, { email, password, returnSecureToken: true })
+            const { data }: { data: FirebaseAuthResponse } = await httpAuth.post('accounts:signUp', {
+                email,
+                password,
+                returnSecureToken: true
+            })
             localStorageService.setToken(data)
-            await createUser({ ...rest, email, _id: data.localId })
+            await createUser({
+                ...rest,
+                email,
+                _id: data.localId,
+                completedMeetings: utils.random(0, 100),
+                imageSrc: utils.generateAvatar(),
+                rate: utils.random(0, 5)
+            })
         } catch (e) {
             errorHandler(e)
         }
     }
 
     const signIn = async ({ email, password }: SignInData) => {
-        const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_API_KEY}`
         try {
-            const { data }: {data: FirebaseAuthResponse} = await httpAuth.post(url, { email, password, returnSecureToken: true })
+            const { data }: { data: FirebaseAuthResponse } = await httpAuth.post('accounts:signInWithPassword', {
+                email,
+                password,
+                returnSecureToken: true
+            })
             localStorageService.setToken(data)
             await getUser(data.localId)
         } catch (e) {
@@ -85,9 +122,24 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
         }
     }
 
+    const edit = async (id: string, userInfo: IUser) => {
+        try {
+            const { content } = await userService.edit(id, { ...currentUser, ...userInfo })
+            setCurrentUser(content)
+        } catch (e) {
+            errorHandler(e)
+        }
+    }
+
+    const logout = () => {
+        localStorageService.reset()
+        setCurrentUser(null)
+        history.push('/')
+    }
+
     return (
-        <AuthContext.Provider value={{ signUp, signIn, user: currentUser }}>
-            {children}
+        <AuthContext.Provider value={{ signUp, signIn, logout, edit, user: currentUser }}>
+            { !isLoading ? children : <Loader/>}
         </AuthContext.Provider>
     )
 }

@@ -1,5 +1,6 @@
 import { TableItem } from './common/table/table-models'
-import { CommentDTO, ObjectDTO, UserDTO } from '../../api/fake.api/api.model'
+import { ObjectDTO } from '../../api/fake.api/api.model'
+import { CommentDTO, CommentFormData, IUser } from '../hooks/types'
 
 export const requiredText = 'This field is required'
 
@@ -17,11 +18,11 @@ export interface QualitiesListProps {
 }
 
 export interface UserProfileProps {
-    user: UserDTO
+    user: IUser
 }
 
 export interface UserEditProps {
-    user: UserDTO
+    user: IUser
     onUpdate: (data: any) => void
 }
 
@@ -34,12 +35,10 @@ export interface UserCardProps {
 }
 
 export interface CommentFormProps {
-    users: UserDTO[]
-    onSend: (data: any) => void
+    onSend: (data: CommentFormData) => void
 }
 
 export interface CommentProps {
-    user: UserDTO | undefined
     comment: CommentDTO
     onDelete: (id: string) => void
 }
@@ -107,6 +106,7 @@ export const genderOptions: ObjectDTO[] = [
 
 export interface LoginFormData {
     email: string
+    name: string
     password: string
     licence: boolean
     profession: ObjectDTO

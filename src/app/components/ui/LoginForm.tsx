@@ -6,9 +6,11 @@ import CheckboxField from '../common/form/CheckboxField'
 import { requiredText } from '../types'
 import { useAuth } from '../../hooks/useAuth'
 import { SignInData } from '../../hooks/types'
+import { useHistory } from 'react-router-dom'
 
 const LoginForm = () => {
     const { signIn } = useAuth()
+    const history = useHistory()
     const { state, submit } = useForm({
         email: ['', [
             Validators.required({ message: requiredText }),
@@ -24,6 +26,12 @@ const LoginForm = () => {
     const onSubmit = async (data: SignInData) => {
         try {
             await signIn(data)
+            const path = (history.location.state as any)?.from?.pathname
+            if (path) {
+                history.push(path)
+            } else {
+                history.push('/')
+            }
         } catch (e) {
             console.log(e)
         }
