@@ -1,12 +1,9 @@
 import React from 'react'
+import utils from '../../common/utils'
 
-const RandomAvatar = React.memo(({ width = 150 }: {width?: number}) => (
+const RandomAvatar = React.memo(({ src, width = 150 }: {width?: number, src?: string}) => (
     <img
-        src={`https://avatars.dicebear.com/api/avataaars/${(
-            Math.random() + 1
-        )
-            .toString(36)
-            .substring(7)}.svg`}
+        src={src || utils.generateAvatar()}
         className="rounded-circle shadow-1-strong me-3"
         alt="avatar" width={width}
     />

@@ -57,6 +57,31 @@ const useForm = (form: UseFormInit, config?: UseFormConfig): UseForm => {
         }
     }
 
+    const patchValueForm = (data: {[key: string]: any}) => {
+        setState(prevState => {
+            const newData = Object.keys(data).reduce((acc, current) => ({
+                ...acc,
+                [current]: {
+                    ...prevState[current], value: data[current]
+                }
+            }), {})
+            return { ...prevState, ...newData } as any
+        })
+    }
+
+    const setError = (name: string, error: Error) => {
+        const control = state[name]
+        if (control) {
+            setState(prevState => ({
+                ...prevState,
+                [name]: {
+                    ...prevState[name],
+                    errors: [...prevState[name].errors, error]
+                }
+            }))
+        }
+    }
+
     const _namedPatchValue = (name: string) => {
         return (value: any) => patchValue(name, value)
     }
@@ -87,7 +112,7 @@ const useForm = (form: UseFormInit, config?: UseFormConfig): UseForm => {
         }
     }
 
-    return { submit, state, reset }
+    return { submit, state, setError, reset, patchValue: patchValueForm }
 }
 
 export default useForm

@@ -1,22 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { UserCardProps } from '../../types'
 import UserForm from '../../ui/UserForm'
-import { UserDTO } from '../../../../api/fake.api/api.model'
-import api from '../../../../api'
 import { useHistory } from 'react-router-dom'
+import { useAuth } from '../../../hooks/useAuth'
+import { UserDTO } from '../../../../api/fake.api/api.model'
+import { IUser } from '../../../hooks/types'
 
-const UserEdit = ({ id } :UserCardProps) => {
-    const [user, setUser] = useState<UserDTO>()
+const UserEdit = ({ id }: UserCardProps) => {
     const history = useHistory()
-
-    useEffect(() => {
-        api.users.getById(id).then(user => setUser(user as UserDTO))
-    }, [])
+    const { user, edit } = useAuth()
 
     const handleBack = () => history.goBack()
 
-    const handleUpdate = (data: any) => {
-        api.users.update(id, data).then(() => history.push(`/users/${id}`))
+    const handleUpdate = async (data: UserDTO) => {
+        const formData: IUser = {
+            ...data,
+            qualities: data.qualities.map(q => q._id),
+            profession: data.profession._id
+        }
+        await edit(id, formData)
+        history.push('/users/' + id)
     }
 
     return (

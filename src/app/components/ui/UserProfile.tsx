@@ -4,9 +4,29 @@ import { UserProfileProps } from '../types'
 import { QualityDTO } from '../../../api/fake.api/api.model'
 import { useHistory } from 'react-router-dom'
 import RandomAvatar from '../common/RandomAvatar'
+import { useProfession } from '../../hooks/useProfession'
+import { useQuality } from '../../hooks/useQuality'
+import { IUser } from '../../hooks/types'
+import { useAuth } from '../../hooks/useAuth'
 
-const UserProfile = ({ user: { name, profession, rate, qualities, completedMeetings } }: UserProfileProps) => {
+const UserProfile = ({
+    user: {
+        imageSrc,
+        name,
+        profession: profId,
+        rate,
+        completedMeetings,
+        qualities: qualitiesIds,
+        _id: id
+    }
+}: UserProfileProps) => {
     const history = useHistory()
+    const { user } = useAuth()
+    const { getProfessionById } = useProfession()
+    const { qualities } = useQuality()
+
+    const profession = getProfessionById(profId)
+    const userQualities = qualities.filter(q => qualitiesIds?.includes(q._id))
 
     const generateQuality = (quality: QualityDTO) => {
         const classes = `badge bg-${quality.color}`
@@ -27,15 +47,17 @@ const UserProfile = ({ user: { name, profession, rate, qualities, completedMeeti
             </div>
             <div className="col-md-4 mb-3">
                 <Card>
-                    <button className="position-absolute top-0 end-0 btn btn-light btn-sm"
-                        onClick={() => navigate('edit', true)}>
-                        <i className="bi bi-gear" />
-                    </button>
+                    {id === user?._id && (
+                        <button className="position-absolute top-0 end-0 btn btn-light btn-sm"
+                            onClick={() => navigate('edit', true)}>
+                            <i className="bi bi-gear"/>
+                        </button>
+                    )}
                     <div className="d-flex flex-column align-items-center text-center position-relative">
-                        <RandomAvatar/>
+                        <RandomAvatar src={imageSrc}/>
                         <div className="mt-3">
                             <h4>{name}</h4>
-                            <p className="text-secondary mb-1">{profession.name}</p>
+                            <p className="text-secondary mb-1">{profession?.name}</p>
                             <div className="text-muted">
                                 <i className="bi bi-caret-down-fill text-primary" role="button"/>
                                 <i className="bi bi-caret-up text-secondary" role="button"/>
@@ -47,7 +69,7 @@ const UserProfile = ({ user: { name, profession, rate, qualities, completedMeeti
 
                 <Card>
                     <h5 className="card-title"><span>Qualities</span></h5>
-                    <p className="card-text">{qualities.map(generateQuality)}</p>
+                    <p className="card-text">{userQualities.map(generateQuality)}</p>
                 </Card>
 
                 <Card>

@@ -3,18 +3,16 @@ import Card from '../common/Card'
 import { CommentFormProps, requiredText } from '../types'
 import useForm from '../../hooks/useForm'
 import Validators from '../../common/validators'
-import SelectField from '../common/form/SelectField'
 import TextareaField from '../common/form/TextareaField'
+import { CommentFormData } from '../../hooks/types'
 
-const CommentForm = ({ users, onSend }: CommentFormProps) => {
+const CommentForm = ({ onSend }: CommentFormProps) => {
     const { state, submit, reset } = useForm({
-        user: [null, [Validators.required({ message: requiredText })]],
         content: ['', [Validators.required({ message: requiredText })]]
     })
 
-    const onSubmit = (data: any) => {
-        console.log('submit')
-        onSend(data)
+    const onSubmit = async (data: CommentFormData) => {
+        await onSend(data)
         reset()
     }
 
@@ -22,11 +20,6 @@ const CommentForm = ({ users, onSend }: CommentFormProps) => {
         <Card center={false}>
             <form onSubmit={submit(onSubmit)}>
                 <h2>New comment</h2>
-                <SelectField items={users}
-                    value={state.user.value}
-                    error={state.user.errors[0]?.message}
-                    onChange={state.user.patchValue}/>
-
                 <TextareaField label="Comment"
                     name="content"
                     value={state.content.value}

@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom'
 import { useUser } from '../../../hooks/useUser'
 import { useProfession } from '../../../hooks/useProfession'
 import Profession from '../../ui/Profession'
+import { useAuth } from '../../../hooks/useAuth'
 
 
 const UserList = () => {
@@ -35,30 +36,19 @@ const UserList = () => {
             sort: 'default',
             componentFn: (item: TableItem) => (<Bookmark user={item} onMark={handleMark}/>)
         },
-        { code: 'rate', title: 'Оценка', path: 'rate', sort: 'default' },
-        {
-            code: 'action',
-            title: '',
-            componentFn: (item: TableItem) => (<button
-                onClick={() => handleDelete(item._id)}
-                type="button"
-                className="btn btn-danger"
-            >
-                Delete
-            </button>)
-        }
+        { code: 'rate', title: 'Оценка', path: 'rate', sort: 'default' }
     ])
     const { users } = useUser()
+    const { user } = useAuth()
     const { professions } = useProfession()
     const [paging, setPaging] = useState<Paging>({ count: 5, page: 1 })
     const [filters, setFilters] = useState<FilterMap>({})
 
     const filterUsers = users
-        .filter((user: { [key: string]: any }) =>
-            Object.keys(filters).every(prop => user[prop]?._id === filters[prop]._id)
+        .filter((u: { [key: string]: any }) =>
+            Object.keys(filters).every(prop => u[prop]?._id === filters[prop]._id)
         )
-
-    const handleDelete = (id: string) => console.log('delete')
+        .filter(u => u._id !== user?._id)
 
     const handleMark = (user: ItemForMark) => console.log('mark')
 
@@ -67,6 +57,7 @@ const UserList = () => {
         change: (page: number) => setPaging((prevState) => ({ count: prevState.count, page })),
         last: (page: number) => setPaging((prevState) => ({ count: prevState.count, page }))
     })
+
     const handleFilterSelect = (code: string, filter: ObjectDTO) => {
         setFilters(prevState => {
             if (prevState[code] && prevState[code]._id === filter._id) {
@@ -82,6 +73,7 @@ const UserList = () => {
             }
         })
     }
+
     const handleReset = () => {
         setFilters({})
         setPaging({ count: 5, page: 1 })
@@ -109,7 +101,7 @@ const UserList = () => {
                                 name="search"
                                 placeholder="Search"/>
                         </div>
-                        <Table items={filterUsers}
+                        <Table items={filterUsers as TableItem[]}
                             columns={columns}
                             paging={paging}
                             onChangePanging={pagingController()}/>

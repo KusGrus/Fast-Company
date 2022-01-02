@@ -10,26 +10,33 @@ import Validators from '../../common/validators'
 import utils from '../../common/utils'
 import { genderOptions, requiredText, UserEditProps } from '../types'
 import { ObjectDTO, ProfessionDTO } from '../../../api/fake.api/api.model'
+import { useProfession } from '../../hooks/useProfession'
+import { useQuality } from '../../hooks/useQuality'
 
 const UserForm = ({ user, onUpdate }: UserEditProps) => {
-    const [professions, setProfessions] = useState<ProfessionDTO[]>([])
-    const [qualities, setQualities] = useState<ObjectDTO[]>([])
+    const { professions, getProfessionById } = useProfession()
+    const { qualities } = useQuality()
 
-    const { state, submit } = useForm({
-        name: [user.name, [Validators.required({ message: requiredText })]],
-        email: [user.email, [
+    const { state, submit, patchValue } = useForm({
+        name: ['', [Validators.required({ message: requiredText })]],
+        email: ['', [
             Validators.required({ message: requiredText }),
             Validators.email({ message: 'Incorrect e-mail!' })
         ]],
-        profession: [user.profession, [Validators.required({ message: requiredText })]],
-        sex: [user.sex],
-        qualities: [user.qualities]
+        profession: [{}, [Validators.required({ message: requiredText })]],
+        sex: [''],
+        qualities: [[]]
     })
 
     useEffect(() => {
-        api.professions.fetchAll().then((p: any) => setProfessions(p))
-        api.qualities.fetchAll().then((q: any) => setQualities(utils.convertQualities(q)))
-    }, [])
+        patchValue({
+            name: user.name,
+            email: user.email,
+            profession: getProfessionById(user.profession),
+            sex: user.sex,
+            qualities: qualities.filter(q => user.qualities.includes(q._id))
+        })
+    }, [professions, qualities])
 
     const onSubmit = (data: any) => onUpdate(data)
 
