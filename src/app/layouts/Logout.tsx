@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import Loader from '../components/common/loader/Loader'
-import { useAuth } from '../hooks/useAuth'
+import { useAppDispatch } from '../store/store'
+import { logOut } from '../store/users'
 
 const Logout = () => {
-    const { logout } = useAuth()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
-        logout()
+        dispatch(logOut())
     }, [])
 
     return <Loader/>

@@ -9,10 +9,10 @@ import { Column, Paging, TableItem } from '../../common/table/table-models'
 import { FilterMap, ItemForMark, TableItemWithQuality } from '../../types'
 import Loader from '../../common/loader/Loader'
 import { Link } from 'react-router-dom'
-import { useUser } from '../../../hooks/useUser'
-import { useProfession } from '../../../hooks/useProfession'
 import Profession from '../../ui/Profession'
-import { useAuth } from '../../../hooks/useAuth'
+import { useTypedSelector } from '../../../hooks/useTypedSelector'
+import { getProfessions } from '../../../store/professions'
+import { getCurrentUserId, getUsers } from '../../../store/users'
 
 
 const UserList = () => {
@@ -28,7 +28,12 @@ const UserList = () => {
             title: 'Качества',
             componentFn: (item: TableItemWithQuality) => (<QualitiesList qualities={item.qualities}/>)
         },
-        { code: 'profession', title: 'Профессия', sort: 'default', componentFn: (item: TableItem) => (<Profession id={item.profession}/>) },
+        {
+            code: 'profession',
+            title: 'Профессия',
+            sort: 'default',
+            componentFn: (item: TableItem) => (<Profession id={item.profession}/>)
+        },
         { code: 'completedMeetings', title: 'Встретился (раз)', path: 'completedMeetings', sort: 'default' },
         {
             code: 'bookmark',
@@ -38,9 +43,10 @@ const UserList = () => {
         },
         { code: 'rate', title: 'Оценка', path: 'rate', sort: 'default' }
     ])
-    const { users } = useUser()
-    const { user } = useAuth()
-    const { professions } = useProfession()
+    const users = useTypedSelector(getUsers)
+    const userId = useTypedSelector(getCurrentUserId)
+    const professions = useTypedSelector(getProfessions)
+
     const [paging, setPaging] = useState<Paging>({ count: 5, page: 1 })
     const [filters, setFilters] = useState<FilterMap>({})
 
@@ -48,7 +54,7 @@ const UserList = () => {
         .filter((u: { [key: string]: any }) =>
             Object.keys(filters).every(prop => u[prop]?._id === filters[prop]._id)
         )
-        .filter(u => u._id !== user?._id)
+        .filter(u => u._id !== userId)
 
     const handleMark = (user: ItemForMark) => console.log('mark')
 

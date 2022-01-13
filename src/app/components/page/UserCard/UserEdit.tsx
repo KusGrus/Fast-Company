@@ -2,24 +2,26 @@ import React from 'react'
 import { UserCardProps } from '../../types'
 import UserForm from '../../ui/UserForm'
 import { useHistory } from 'react-router-dom'
-import { useAuth } from '../../../hooks/useAuth'
 import { UserDTO } from '../../../../api/fake.api/api.model'
 import { IUser } from '../../../hooks/types'
+import { useTypedSelector } from '../../../hooks/useTypedSelector'
+import { edit, getCurrentUserData } from '../../../store/users'
+import { useAppDispatch } from '../../../store/store'
 
 const UserEdit = ({ id }: UserCardProps) => {
     const history = useHistory()
-    const { user, edit } = useAuth()
+    const dispatch = useAppDispatch()
+    const user = useTypedSelector(getCurrentUserData)
 
     const handleBack = () => history.goBack()
 
-    const handleUpdate = async (data: UserDTO) => {
+    const handleUpdate = (data: UserDTO) => {
         const formData: IUser = {
             ...data,
             qualities: data.qualities.map(q => q._id),
             profession: data.profession._id
         }
-        await edit(id, formData)
-        history.push('/users/' + id)
+        dispatch(edit(id, { ...user, ...formData }))
     }
 
     return (

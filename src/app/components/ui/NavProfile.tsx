@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { useAuth } from '../../hooks/useAuth'
 import { Link } from 'react-router-dom'
 import RandomAvatar from '../common/RandomAvatar'
+import { useTypedSelector } from '../../hooks/useTypedSelector'
+import { getCurrentUserData } from '../../store/users'
 
 const NavProfile = () => {
-    const { user } = useAuth()
+    const user = useTypedSelector(getCurrentUserData)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const toggleMenu = () => setIsOpen(prevState => !prevState)
     return (

@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import useForm from '../../hooks/useForm'
 import RadioField from '../common/form/RadioField'
 import MultiSelectField from '../common/form/MultiSelectField'
 import Form from '../common/Form'
-import api from '../../../api'
 import InputField from '../common/form/InputField'
 import SelectField from '../common/form/SelectField'
 import Validators from '../../common/validators'
-import utils from '../../common/utils'
 import { genderOptions, requiredText, UserEditProps } from '../types'
-import { ObjectDTO, ProfessionDTO } from '../../../api/fake.api/api.model'
-import { useProfession } from '../../hooks/useProfession'
-import { useQuality } from '../../hooks/useQuality'
+import { getQualities } from '../../store/qualities'
+import { useTypedSelector } from '../../hooks/useTypedSelector'
+import { getProfessions, getProfessionsById } from '../../store/professions'
 
 const UserForm = ({ user, onUpdate }: UserEditProps) => {
-    const { professions, getProfessionById } = useProfession()
-    const { qualities } = useQuality()
+    const professions = useTypedSelector(getProfessions)
+    const userProfessions = useTypedSelector(getProfessionsById(user.profession))
+    const qualities = useTypedSelector(getQualities)
 
     const { state, submit, patchValue } = useForm({
         name: ['', [Validators.required({ message: requiredText })]],
@@ -32,9 +31,9 @@ const UserForm = ({ user, onUpdate }: UserEditProps) => {
         patchValue({
             name: user.name,
             email: user.email,
-            profession: getProfessionById(user.profession),
+            profession: userProfessions,
             sex: user.sex,
-            qualities: qualities.filter(q => user.qualities.includes(q._id))
+            qualities: qualities?.filter(q => user.qualities.includes(q._id))
         })
     }, [professions, qualities])
 

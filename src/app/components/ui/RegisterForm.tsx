@@ -10,15 +10,14 @@ import RadioField from '../common/form/RadioField'
 import MultiSelectField from '../common/form/MultiSelectField'
 import CheckboxField from '../common/form/CheckboxField'
 import { genderOptions, LoginFormData, requiredText } from '../types'
-import { useAuth } from '../../hooks/useAuth'
 import { IUser } from '../../hooks/types'
-import { useHistory } from 'react-router-dom'
+import { useAppDispatch } from '../../store/store'
+import { signUp } from '../../store/users'
 
 const RegisterForm = () => {
-    const history = useHistory()
+    const dispatch = useAppDispatch()
     const [professions, setProfessions] = useState<ProfessionDTO[]>([])
     const [qualities, setQualities] = useState<ObjectDTO[]>([])
-    const { signUp } = useAuth()
 
     const { state, submit } = useForm({
         name: ['', [
@@ -44,18 +43,13 @@ const RegisterForm = () => {
         api.qualities.fetchAll().then((q: any) => setQualities(utils.convertQualities(q)))
     }, [])
 
-    const onSubmit = async (data: LoginFormData) => {
+    const onSubmit = (data: LoginFormData) => {
         const formData: IUser = {
             ...data,
             profession: data.profession._id,
             qualities: data.qualities.map(q => q._id)
         }
-        try {
-            await signUp(formData)
-            history.push('/')
-        } catch (e) {
-            console.log(e)
-        }
+        dispatch(signUp(formData))
     }
 
     return (

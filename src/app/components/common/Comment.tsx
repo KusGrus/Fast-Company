@@ -3,14 +3,14 @@ import { CommentProps } from '../types'
 import RandomAvatar from './RandomAvatar'
 import Loader from './loader/Loader'
 import utils from '../../common/utils'
-import { useUser } from '../../hooks/useUser'
-import { useAuth } from '../../hooks/useAuth'
+import { useTypedSelector } from '../../hooks/useTypedSelector'
+import { getCurrentUserId, getUserById } from '../../store/users'
 
 const Comment = ({ comment, onDelete }: CommentProps) => {
     const date = utils.timeLeft(comment.createdAt)
-    const { getUserById } = useUser()
-    const { user: currentUser } = useAuth()
-    const user = getUserById(comment.userId)
+
+    const userId = useTypedSelector(getCurrentUserId)
+    const user = useTypedSelector(getUserById(comment.userId))
 
     if (!comment) {
         return <Loader/>
@@ -27,7 +27,7 @@ const Comment = ({ comment, onDelete }: CommentProps) => {
                                         <p className="mb-1">{user?.name}
                                             <span className="small" style={{ marginLeft: '10px' }}>{date}</span>
                                         </p>
-                                        {currentUser?._id === comment.userId && (
+                                        {userId === comment.userId && (
                                             <button className="btn btn-sm text-primary d-flex align-items-center"
                                                 onClick={() => onDelete(comment._id)}>
                                                 <i className="bi bi-x-lg"/>
