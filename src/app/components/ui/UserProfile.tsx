@@ -4,10 +4,10 @@ import { UserProfileProps } from '../types'
 import { QualityDTO } from '../../../api/fake.api/api.model'
 import { useHistory } from 'react-router-dom'
 import RandomAvatar from '../common/RandomAvatar'
-import { useProfession } from '../../hooks/useProfession'
-import { useQuality } from '../../hooks/useQuality'
-import { IUser } from '../../hooks/types'
-import { useAuth } from '../../hooks/useAuth'
+import { useTypedSelector } from '../../hooks/useTypedSelector'
+import { getQualityByIds } from '../../store/qualities'
+import { getProfessionsById } from '../../store/professions'
+import { getCurrentUserId } from '../../store/users'
 
 const UserProfile = ({
     user: {
@@ -21,12 +21,9 @@ const UserProfile = ({
     }
 }: UserProfileProps) => {
     const history = useHistory()
-    const { user } = useAuth()
-    const { getProfessionById } = useProfession()
-    const { qualities } = useQuality()
-
-    const profession = getProfessionById(profId)
-    const userQualities = qualities.filter(q => qualitiesIds?.includes(q._id))
+    const userId = useTypedSelector(getCurrentUserId)
+    const userProfessions = useTypedSelector(getProfessionsById(profId))
+    const userQualities = useTypedSelector(getQualityByIds(qualitiesIds))
 
     const generateQuality = (quality: QualityDTO) => {
         const classes = `badge bg-${quality.color}`
@@ -47,7 +44,7 @@ const UserProfile = ({
             </div>
             <div className="col-md-4 mb-3">
                 <Card>
-                    {id === user?._id && (
+                    {id === userId && (
                         <button className="position-absolute top-0 end-0 btn btn-light btn-sm"
                             onClick={() => navigate('edit', true)}>
                             <i className="bi bi-gear"/>
@@ -57,7 +54,7 @@ const UserProfile = ({
                         <RandomAvatar src={imageSrc}/>
                         <div className="mt-3">
                             <h4>{name}</h4>
-                            <p className="text-secondary mb-1">{profession?.name}</p>
+                            <p className="text-secondary mb-1">{userProfessions?.name}</p>
                             <div className="text-muted">
                                 <i className="bi bi-caret-down-fill text-primary" role="button"/>
                                 <i className="bi bi-caret-up text-secondary" role="button"/>

@@ -1,28 +1,37 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Route, useParams } from 'react-router-dom'
 import UserList from '../components/page/UserList'
 import UserCard, { UserEdit } from '../components/page/UserCard'
-import UserProvider from '../hooks/useUser'
-import { useAuth } from '../hooks/useAuth'
 import RouteGuard from '../components/common/RouteGuard'
+import { useTypedSelector } from '../hooks/useTypedSelector'
+import { getCurrentUserId, getUsers, loadUsersList } from '../store/users'
+import { useAppDispatch } from '../store/store'
 
 const Users = () => {
     const { id } = useParams<{ id: string }>()
-    const { user } = useAuth()
+    const userId = useTypedSelector(getCurrentUserId)
+    const users = useTypedSelector(getUsers)
+    const dispatch = useAppDispatch()
 
-    const editGuard = () => user?._id === id
+    useEffect(() => {
+        if (!users.length) {
+            dispatch(loadUsersList())
+        }
+    }, [])
+
+    const editGuard = () => userId === id
 
     return (
-        <UserProvider>
+        <>
             <Route path="/users" component={UserList} exact/>
             <RouteGuard path="/users/:id/edit"
                 exact
-                redirect={{ to: '/users/' + user?._id }}
+                redirect={{ to: '/users/' + userId }}
                 guard={editGuard}>
                 <UserEdit id={id}/>
             </RouteGuard>
             <Route path="/users/:id" exact render={() => (<UserCard id={id}/>)}/>
-        </UserProvider>
+        </>
     )
 }
 

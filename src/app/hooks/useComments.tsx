@@ -2,9 +2,10 @@ import React, { PropsWithChildren, useContext, useEffect, useState } from 'react
 import { CommentDTO, CommentFormData, UseCommentsContext } from './types'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import { useAuth } from './useAuth'
 import { nanoid } from 'nanoid'
 import commentService from '../services/comment.service'
+import { useTypedSelector } from './useTypedSelector'
+import { getCurrentUserId } from '../store/users'
 
 const CommentsContext = React.createContext<UseCommentsContext | null>(null)
 
@@ -14,7 +15,7 @@ export const useComments = (): UseCommentsContext => {
 
 const CommentsProvider = ({ children }: PropsWithChildren<any>) => {
     const { id } = useParams<{ id: string }>()
-    const { user } = useAuth()
+    const userId = useTypedSelector(getCurrentUserId)
     const [comments, setComments] = useState<CommentDTO[]>([])
     const [isLoading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
@@ -30,7 +31,7 @@ const CommentsProvider = ({ children }: PropsWithChildren<any>) => {
             ...data,
             _id: nanoid(),
             pageId: id,
-            userId: user?._id as string,
+            userId: userId,
             createdAt: Date.now()
         }
         try {
@@ -66,7 +67,6 @@ const CommentsProvider = ({ children }: PropsWithChildren<any>) => {
 
     useEffect(() => {
         if (error) {
-            console.log(error)
             toast.error(error)
             setError(null)
         }

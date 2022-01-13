@@ -1,5 +1,5 @@
-import { ProfessionDTO, QualityDTO, UserDTO } from '../../api/fake.api/api.model'
-import { CommentDTO, IUser } from '../hooks/types'
+import { ProfessionDTO, QualityDTO } from '../../api/fake.api/api.model'
+import { CommentDTO, FirebaseAuthResponse, IUser, SignInData } from '../hooks/types'
 
 export interface ApiResponse<T> {
     data: ApiDTO<T>
@@ -43,4 +43,10 @@ export interface CommentService {
     add: (comment: CommentDTO) => Promise<ApiDTO<CommentDTO>>
     get: (pageId: string) => Promise<ApiDTO<CommentDTO[]>>
     delete: (id: string) => Promise<ApiDTO<CommentDTO>>
+}
+
+export interface AuthService {
+    signUp: (user: IUser) => Promise<FirebaseAuthResponse>
+    signIn: (data: SignInData) => Promise<FirebaseAuthResponse>
+    edit: (id: string, user: IUser) => Promise<IUser>
 }
