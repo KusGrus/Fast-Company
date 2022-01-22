@@ -1,0 +1,20 @@
+.footer-wrapper {
+	display: grid;
+
+	padding: 25px 30px;
+
+	color: var(--secondary-text);
+	background-color: var(--primary);
+
+	font-size: 16px;
+	line-height: 1.25;
+	grid-template-columns: 1fr auto auto;
+	gap: 40px;
+}
+
+@media (max-width: 765px) {
+	.footer-wrapper {
+		grid-template-columns: 1fr;
+		gap: 10px;
+	}
+}

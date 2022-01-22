@@ -1,3 +1,14 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-use-before-define": "off",
+    "semi": [2, "never"],
+    "indent": ["error", 4, { "SwitchCase": 1 }],
+    "react/display-name": "off",
+    "space-before-function-paren": "off",
+    "no-unused-vars": "off",
+    "no-multiple-empty-lines": "off",
+    "@next/next/no-document-import-in-page": "off"
+  }
+
 }

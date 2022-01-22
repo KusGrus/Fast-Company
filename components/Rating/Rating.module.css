@@ -1,0 +1,27 @@
+.rating {
+	position: relative;
+
+	display: grid;
+	grid-template-columns: repeat(5, 20px);
+	gap: 10px;
+}
+
+.error svg {
+	stroke: var(--danger);
+}
+
+.star.filled {
+	fill: var(--primary);
+}
+
+.star.editable {
+	cursor: pointer;
+}
+
+.error-message {
+	position: absolute;
+	bottom: -20px;
+	left: 0;
+
+	color: var(--danger);
+}
